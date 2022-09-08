@@ -1,0 +1,157 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate = "layout/main.html"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<div layout:fragment = "mainContent">
+    <!-- Button Add Category -->
+    <div class="row" sec:authorize="hasAnyRole('ROLE_ADMIN')">
+        <div class="col-12 my-2">
+            <button type="button" class="button_style"
+                    data-bs-toggle="modal" data-bs-target="#addCategoryModal"
+                    th:text="${'+Add Category'}">
+            </button>
+        </div>
+    </div>
+    <!-- List of Categories -->
+    <div class="row">
+        <div class="col-12 mt-3">
+            <table class="table table-striped">
+                <thead>
+                <tr class="fw-bold">
+                    <td th:text="ID"></td>
+                    <td th:text="NAME"></td>
+                    <td width="10%" sec:authorize="hasAnyRole('ROLE_ADMIN')"
+                        th:text="DETAILS">
+                    </td>
+                    <td width="10%" sec:authorize="hasAnyRole('ROLE_ADMIN')"
+                        th:text="DELETE">
+                    </td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="cat : ${allCategories}">
+                    <td th:text="${cat.id}"></td>
+                    <td th:text="${cat.name}"></td>
+                    <td sec:authorize="hasAnyRole('ROLE_ADMIN')">
+                        <button class="btn btn-primary btn-sm"
+                                data-bs-toggle="modal" th:data-bs-target="'#editCategoryModal' + ${cat.id}"
+                                th:text="DETAILS">
+                        </button>
+                    </td>
+                    <td sec:authorize="hasAnyRole('ROLE_ADMIN')">
+                        <button class="btn btn-danger btn-sm"
+                                data-bs-toggle="modal" th:data-bs-target="'#deleteCategoryModal' + ${cat.id}"
+                                th:text="DELETE">
+                        </button>
+                    </td>
+                    <!-- Modal Edit Category -->
+                    <div class="modal fade" th:id="'editCategoryModal' + ${cat.id}"
+                         data-bs-backdrop="static" data-bs-keyboard="false"
+                         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <form th:action="@{'/editcategory'}" method="post">
+                                    <input type="hidden" name="category_id" th:value="${cat.id}">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title"
+                                            th:text="${'EDIT CATEGORY'}">
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row mt-3">
+                                            <div class="col-12">
+                                                <label th:text="NAME"></label>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-12">
+                                                <input type="text" class="form-control" name="category_name" required
+                                                       th:value="${cat.name}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                                th:text="CLOSE">
+                                        </button>
+                                        <button class="btn btn-primary"
+                                                th:text="SAVE">
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal Delete Category -->
+                    <div class="modal fade" th:id="'deleteCategoryModal' + ${cat.id}"
+                         data-bs-backdrop="static" data-bs-keyboard="false"
+                         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form th:action="@{'/deletecategory'}" method="post">
+                                    <input type="hidden" name="category_id" th:value="${cat.id}">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" th:text="${'DELETE CATEGORY'}"></h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h6 th:text="${'Do you want to remove the Category?'}"></h6>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                                th:text="CANCEL"></button>
+                                        <button class="btn btn-danger" th:text="DELETE"></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Modal Add Category -->
+    <div class="modal fade" id="addCategoryModal"
+         data-bs-backdrop="static" data-bs-keyboard="false"
+         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form th:action="@{'/addcategory'}" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title"
+                            th:text="${'ADD CATEGORY'}">
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <label th:text="NAME"></label>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <input type="text" class="form-control" name="category_name" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                th:text="CLOSE">
+                        </button>
+                        <button class="btn btn-primary"
+                                th:text="ADD">
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

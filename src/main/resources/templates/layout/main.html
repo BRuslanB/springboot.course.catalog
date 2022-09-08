@@ -1,0 +1,25 @@
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ADMIN PANEL COURSE CATALOG</title>
+    <link th:insert = "~{head.html}">
+</head>
+<body>
+    <div class="container">
+        <div th:insert = "~{navbar.html}"></div>
+    </div>
+    <div class="container mt-3" style="min-height: 600px;">
+        <div class="row">
+            <div class="col-12">
+                <div layout:fragment = "mainContent"></div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div th:insert = "~{footer.html}"></div>
+    </div>
+</body>
+</html>

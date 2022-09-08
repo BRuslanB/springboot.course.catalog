@@ -1,0 +1,58 @@
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="layout/main.html">
+<div layout:fragment="mainContent">
+    <!-- SIGN IN -->
+    <div class="row">
+        <div class="col-4 mt-3 mx-auto">
+            <form th:action="@{'/toregister'}" method="post">
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label th:text="EMAIL"></label>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <input type="email" class="form-control" name="user_email" required>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label th:text="PASSWORD"></label>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <input type="password" class="form-control" name="user_password" required>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label th:text="${'RETYPE PASSWORD'}"></label>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <input type="password" class="form-control" name="user_re_password" required>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label th:text="${'FULL NAME'}"></label>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <input type="text" class="form-control" name="user_full_name" required>
+                    </div>
+                </div>
+                <button class="btn btn-primary mt-3"
+                        th:text="${'SIGN UP'}">
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+</html>

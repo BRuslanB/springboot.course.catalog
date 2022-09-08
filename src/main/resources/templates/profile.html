@@ -1,0 +1,86 @@
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="layout/main.html">
+<div layout:fragment="mainContent">
+    <!-- UPDATE PROFILE -->
+    <div class="row">
+        <div class="col-4 mt-3 mx-auto">
+            <form th:action="@{'/updateprofile'}" method="post">
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label th:text="EMAIL"></label>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <input type="email" class="form-control" name="user_email" readonly
+                               th:value="${#authentication.getPrincipal().email}">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label th:text="${'FULL NAME'}"></label>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <input type="text" class="form-control" name="user_full_name" required
+                               th:value="${#authentication.getPrincipal().fullName}">
+                    </div>
+                </div>
+<!--                <button type="button" class="btn btn-secondary mt-3"-->
+<!--                        th:text="CANCEL">-->
+<!--                </button>-->
+                <button class="btn btn-primary mt-3"
+                        th:text="SAVE">
+                </button>
+            </form>
+        </div>
+    </div>
+    <!-- UPDATE PASSWORD -->
+    <div class="row">
+        <div class="col-4 mt-3 mx-auto">
+            <form th:action="@{'/updatepassword'}" method="post">
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label th:text="${'OLD PASSWORD'}"></label>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <input type="password" class="form-control" name="user_old_password" required>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label th:text="${'NEW PASSWORD'}"></label>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <input type="password" class="form-control" name="user_new_password" required>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label th:text="${'REPEAT NEW PASSWORD'}"></label>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <input type="password" class="form-control" name="user_re_new_password" required>
+                    </div>
+                </div>
+<!--                <button type="button" class="btn btn-secondary mt-3"-->
+<!--                        th:text="CANCEL">-->
+<!--                </button>-->
+                <button class="btn btn-primary mt-3"
+                        th:text="${'UPDATE PASSWORD'}">
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+</html>
