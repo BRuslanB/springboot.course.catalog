@@ -33,7 +33,6 @@ public class HomeController {
 
     private final CategoryServiceImpl categoryService;
     private final CourseServiceImpl courseService;
-
     private final FileUploadServiceImpl fileUploadService;
 
     @GetMapping("/")
@@ -57,7 +56,7 @@ public class HomeController {
         return "coursedetails";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_TEACHER')")
     @GetMapping("/categories")
     public String categoriesPage(Model model) {
 
@@ -67,7 +66,7 @@ public class HomeController {
         return "categories";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_TEACHER')")
     @GetMapping("/courses")
     public String coursesPage(Model model) {
 
@@ -177,7 +176,7 @@ public class HomeController {
         return null;
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyRole('ROLE_TEACHER')")
     @PostMapping(value = "/uploadcontent")
     public String uploadContent(@RequestParam(name = "course_content") MultipartFile file,
                                 @RequestParam(name = "course_id") Long courseId) {

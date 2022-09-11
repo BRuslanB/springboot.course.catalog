@@ -18,10 +18,13 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="categories.html">Categories</a>
+                        <a class="nav-link" href="mycourses.html">My Courses</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="courses.html">Courses</a>
+                        <a class="nav-link" href="courses.html">All Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="categories.html">All Categories</a>
                     </li>
                 </ul>
             </div>
@@ -40,7 +43,10 @@
                             <th>RATING</th>
                             <th>AUTHOR</th>
                             <th>CATEGORY</th>
-                        </tr>    
+                            <td style="width: 10%">
+                                ENROLL
+                            </td>
+                        </tr>
                     </thead>
                     <tbody id=coursesContent>
                     </tbody>
@@ -64,19 +70,40 @@
             var htmlCode = "";
             for (i=0; i<coursesList.length; i++){
                 htmlCode += "<tr>";
-                htmlCode += "<td>" + coursesList[i]["id"] + "</td>";
-                htmlCode += "<td>" + coursesList[i]["name"] + "</td>";
-                htmlCode += "<td>" + coursesList[i]["description"] + "</td>";
-                htmlCode += "<td>" + coursesList[i]["priceValue"] + "</td>";
-                htmlCode += "<td>" + coursesList[i]["ratingValue"] + "</td>";
-                htmlCode += "<td>" + coursesList[i]["author"]["fullName"] + "</td>";
-                htmlCode += "<td>" + coursesList[i]["category"]["name"] + "</td>";
+                    htmlCode += "<td>" + coursesList[i]["id"] + "</td>";
+                    htmlCode += "<td>" + coursesList[i]["name"] + "</td>";
+                    htmlCode += "<td>" + coursesList[i]["description"] + "</td>";
+                    htmlCode += "<td>" + coursesList[i]["priceValue"] + "</td>";
+                    htmlCode += "<td>" + coursesList[i]["ratingValue"] + "</td>";
+                    htmlCode += "<td>" + coursesList[i]["author"]["fullName"] + "</td>";
+                    htmlCode += "<td>" + coursesList[i]["category"]["name"] + "</td>";
+                    // htmlCode += "<td>" + "<button class='btn btn-success btn-sm' onclick='toEnroll(coursesList[i][''id''])'>" +
+                    // htmlCode += "<td>" + "<button class='btn btn-success btn-sm' onclick='toEnroll()'>" +
+                    //             "ENROLL" + "</button>";
+                    htmlCode += "<td>" + "<button class='btn btn-success btn-sm' data-bs-toggle='modal' " +
+                                "data-bs-target='#enrollCourseModal'" + coursesList[i]["id"] + ">" +
+                                "ENROLL" + "</button>";
                 htmlCode += "</tr>";
             }
             document.getElementById("coursesContent").innerHTML = htmlCode;
         }
         xhttp.open("GET","http://localhost:8000/api/courses");
         xhttp.send();
+    }
+    function toEnroll(){
+        var courseId = 3;
+        var enrollObj = {
+            "userId": 3,
+            "courseId": courseId,
+            "comment": 'Super',
+            "userRating": 1
+        };
+        var post = JSON.stringify(enrollObj);
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('POST', "/api/enroll", true);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=UTF-8');
+        xhr.send(post);
     }
 </script>
 </html>

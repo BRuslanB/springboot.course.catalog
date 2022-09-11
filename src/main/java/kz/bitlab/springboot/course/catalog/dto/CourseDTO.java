@@ -11,7 +11,7 @@ public class CourseDTO {
     private String description;
     private double priceValue;
     private int ratingValue;
-    private AuthorDTO author;
+    private UserDTO author;
     private CategoryDTO category;
     private String content;
 }

@@ -35,3 +35,12 @@ CREATE TABLE t_users_roles(
     user_id INT NOT NULL,
     roles_id INT NOT NULL
 );
+
+DROP TABLE IF EXISTS t_enroll_cards;
+CREATE TABLE t_enroll_cards(
+      id SERIAL PRIMARY KEY NOT NULL,
+      comment TEXT,
+      rating INT DEFAULT 0,
+      course_id INT NOT NULL,
+      user_id INT NOT NULL
+);

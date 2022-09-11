@@ -2,6 +2,7 @@ package kz.bitlab.springboot.course.catalog.services.impl;
 
 import kz.bitlab.springboot.course.catalog.model.Course;
 import kz.bitlab.springboot.course.catalog.services.FileUploadService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,13 +14,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Service
+@RequiredArgsConstructor
 public class FileUploadServiceImpl implements FileUploadService {
 
     @Value("${targetURL}")
     private String targetURL;
 
-    @Autowired
-    private CourseServiceImpl courseService;
+    private final CourseServiceImpl courseService;
 
     public boolean uploadContent(MultipartFile file, Long courseId) {
         try {

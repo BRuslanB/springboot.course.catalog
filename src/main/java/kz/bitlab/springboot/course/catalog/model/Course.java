@@ -1,14 +1,21 @@
 package kz.bitlab.springboot.course.catalog.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "t_courses")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Course {
 
     @Id
@@ -26,7 +33,10 @@ public class Course {
     private double price;
 
     @Column(name = "rating")
-    private int rating; // 1,2,3,4,5
+    private int rating; // 1,2,3,4,5 {Summary Rating}
+
+    @Column(name="content_url")
+    private String contentUrl;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private User author;
@@ -34,6 +44,6 @@ public class Course {
     @ManyToOne(fetch = FetchType.EAGER)
     private Category category;
 
-    @Column(name="content_url")
-    private String contentUrl;
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<EnrollCard> enrollCards;
 }

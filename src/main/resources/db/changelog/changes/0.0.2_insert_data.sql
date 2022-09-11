@@ -23,4 +23,9 @@ INSERT INTO t_users_roles (user_id, roles_id)
            (1, 2),
            (1, 3),
            (2, 2),
+           (2, 3),
            (3, 3);
+
+INSERT INTO t_enroll_cards (comment, rating, course_id, user_id)
+VALUES ('So So', 2, 1, 2),
+       ('Its good course', 3, 2, 3);

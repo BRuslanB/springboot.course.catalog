@@ -1,6 +1,6 @@
 package kz.bitlab.springboot.course.catalog.rest;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +12,10 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/categories")
 @CrossOrigin
+@RequiredArgsConstructor
 public class CategoryController {
-    @Autowired
-    private CategoryServiceImpl categoryService;
+
+    private final CategoryServiceImpl categoryService;
 
     @GetMapping
     public ResponseEntity<List<CategoryDTO>> getAllCategoriesDTO(){

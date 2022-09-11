@@ -4,6 +4,7 @@ import kz.bitlab.springboot.course.catalog.model.Role;
 import kz.bitlab.springboot.course.catalog.model.User;
 import kz.bitlab.springboot.course.catalog.repository.RoleRepository;
 import kz.bitlab.springboot.course.catalog.repository.UserRepository;
+import kz.bitlab.springboot.course.catalog.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 
 @Service
-public class UserServiceImpl implements UserDetailsService {
+public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Autowired
     private UserRepository userRepository;

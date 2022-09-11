@@ -1,6 +1,8 @@
 package kz.bitlab.springboot.course.catalog.api;
 
+import kz.bitlab.springboot.course.catalog.services.UserService;
 import kz.bitlab.springboot.course.catalog.services.impl.UserServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -14,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import kz.bitlab.springboot.course.catalog.model.User;
 
 @Controller
+@RequiredArgsConstructor
 public class SecurityController {
 
-    @Autowired
-    private UserServiceImpl userService;
+    private final UserServiceImpl userService;
 
     @GetMapping("/enter")
     public String enterPage(Model model) {

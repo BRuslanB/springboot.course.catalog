@@ -24,7 +24,9 @@
                     <td th:text="DESCRIPTION"></td>
                     <td th:text="PRICE"></td>
                     <td th:text="RATING"></td>
-                    <td th:text="CONTENT" style="width: 10%"></td>
+                    <td sec:authorize="hasAnyRole('ROLE_TEACHER')"
+                        th:text="CONTENT" style="width: 10%">
+                    </td>
                     <td sec:authorize="hasAnyRole('ROLE_ADMIN')"
                         th:text="${'VIEW MORE'}" style="width: 10%">
                     </td>

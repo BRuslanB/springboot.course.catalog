@@ -8,18 +8,27 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "t_categories")
+@Table(name = "t_enroll_cards")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Category {
+public class EnrollCard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
-    private String name; // Programming, IT, Math, Finance
+    @ManyToOne
+    private User user;
+
+    @ManyToOne
+    private Course course;
+
+    @Column(name = "rating")
+    private int userRating; // 1,2,3,4,5 {User Rating}
+
+    @Column(name="comment")
+    private String comment;
 }
