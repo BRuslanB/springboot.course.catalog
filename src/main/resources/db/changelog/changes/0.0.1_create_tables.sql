@@ -27,7 +27,8 @@ CREATE TABLE t_users(
     id SERIAL PRIMARY KEY NOT NULL,
     email TEXT NOT NULL,
     password TEXT NOT NULL,
-    full_name TEXT NOT NULL
+    full_name TEXT NOT NULL,
+    avatar_url TEXT
 );
 
 DROP TABLE IF EXISTS t_users_roles;

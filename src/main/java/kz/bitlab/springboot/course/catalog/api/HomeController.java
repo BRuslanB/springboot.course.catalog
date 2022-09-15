@@ -3,10 +3,6 @@ package kz.bitlab.springboot.course.catalog.api;
 import kz.bitlab.springboot.course.catalog.services.impl.CourseServiceImpl;
 import kz.bitlab.springboot.course.catalog.services.impl.FileUploadServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,16 +16,17 @@ import kz.bitlab.springboot.course.catalog.model.User;
 import kz.bitlab.springboot.course.catalog.services.impl.CategoryServiceImpl;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
 
-    @Value("${uploadURL}")
-    private String fileUploadURL;
+//    @Value("${uploadContentURL}")
+//    private String fileUploadContentURL;
+
+//    @Value("${uploadAvatarURL}")
+//    private String fileUploadAvatarURL;
 
     private final CategoryServiceImpl categoryService;
     private final CourseServiceImpl courseService;
@@ -128,7 +125,7 @@ public class HomeController {
             course.setDescription(courseDescription);
             course.setPrice(coursePrice);
             course.setRating(courseRating);
-            course.setAuthor(getCurrentUser());
+            //course.setAuthor(getCurrentUser());
             courseService.addCourse(course);
         }
         return "redirect:/courses";
@@ -181,26 +178,53 @@ public class HomeController {
     public String uploadContent(@RequestParam(name = "course_content") MultipartFile file,
                                 @RequestParam(name = "course_id") Long courseId) {
         if (file.getContentType().equals("application/pdf")){
-            fileUploadService.uploadContent(file, courseId);
+            fileUploadService.uploadCourseContent(file, courseId);
         }
         return "redirect:/courses";
     }
 
-    @GetMapping(value = "/content/{url}", produces = MediaType.APPLICATION_PDF_VALUE)
-    public @ResponseBody byte[] content(@PathVariable(name = "url", required = false) String url) throws IOException {
-        String pdfURL = fileUploadURL + "default.pdf";
-        if (url != null){
-            pdfURL = fileUploadURL +  url + ".pdf";
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping(value = "/uploadavatar")
+    public String uploadAvatar(@RequestParam(name = "user_avatar") MultipartFile file){
+        if (file.getContentType().equals("image/jpeg") || file.getContentType().equals("image/png")){
+            fileUploadService.uploadUserAvatar(file, getCurrentUser());
         }
-        InputStream in;
-        try{
-            ClassPathResource classPathResource = new ClassPathResource(pdfURL);
-            in = classPathResource.getInputStream();
-        }catch(Exception e){
-            pdfURL = fileUploadURL + "default.pdf";
-            ClassPathResource classPathResource = new ClassPathResource(pdfURL);
-            in = classPathResource.getInputStream();
-        }
-        return IOUtils.toByteArray(in);
+        return "redirect:/profile";
     }
+
+//    @GetMapping(value = "/content/{url}", produces = MediaType.APPLICATION_PDF_VALUE)
+//    public @ResponseBody byte[] content(@PathVariable(name = "url", required = false) String url) throws IOException {
+//        String pdfURL = fileUploadContentURL + "default_content.pdf";
+//        if (!url.isEmpty()){
+//            pdfURL = fileUploadContentURL +  url + ".pdf";
+//        }
+//        InputStream in;
+//        try{
+//            ClassPathResource classPathResource = new ClassPathResource(pdfURL);
+//            in = classPathResource.getInputStream();
+//        }catch(Exception e){
+//            pdfURL = fileUploadContentURL + "default_content.pdf";
+//            ClassPathResource classPathResource = new ClassPathResource(pdfURL);
+//            in = classPathResource.getInputStream();
+//        }
+//        return IOUtils.toByteArray(in);
+//    }
+//
+//    @GetMapping(value = "/avatar/{url}", produces = MediaType.IMAGE_JPEG_VALUE)
+//    public @ResponseBody byte[] avatar(@PathVariable(name = "url", required = false) String url) throws IOException{
+//        String picURL = fileUploadAvatarURL + "default_avatar.jpg";
+//        if (!url.isEmpty()) {
+//            picURL = fileUploadAvatarURL +  url + ".jpg";
+//        }
+//        InputStream in;
+//        try{
+//            ClassPathResource classPathResource = new ClassPathResource(picURL);
+//            in = classPathResource.getInputStream();
+//        }catch(Exception e){
+//            picURL = fileUploadAvatarURL + "default_avatar.jpg";
+//            ClassPathResource classPathResource = new ClassPathResource(picURL);
+//            in = classPathResource.getInputStream();
+//        }
+//        return IOUtils.toByteArray(in);
+//    }
 }

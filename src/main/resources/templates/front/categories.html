@@ -41,9 +41,17 @@
                         </tr>    
                     </thead>
                     <tbody id=categoriesContent>
+                        <!--htmlCode-->
                     </tbody>
                 </table>
             </div>
+        </div>
+    </div>
+    <div class="container-fluid text-light mt-3 py-2" style="background-color: lightseagreen;">
+        <div clas="row">
+            <p class="text-center">
+                Copyright &copy; 2022
+            </p>
         </div>
     </div>
 </body>
@@ -62,8 +70,8 @@
             var htmlCode = "";
             for (i=0;i<categoriesList.length;i++){
                 htmlCode += "<tr>";
-                htmlCode += "<td>" + categoriesList[i]["id"] + "</td>";
-                htmlCode += "<td>" + categoriesList[i]["name"] + "</td>";
+                    htmlCode += "<td>" + categoriesList[i]["id"] + "</td>";
+                    htmlCode += "<td>" + categoriesList[i]["name"] + "</td>";
                 htmlCode += "</tr>";
             }
             document.getElementById("categoriesContent").innerHTML = htmlCode;

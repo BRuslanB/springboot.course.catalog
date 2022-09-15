@@ -43,15 +43,26 @@
                             <th>RATING</th>
                             <th>AUTHOR</th>
                             <th>CATEGORY</th>
-                            <td style="width: 10%">
-                                ENROLL
-                            </td>
+                            <th style="width: 10%">
+                                ACTION
+                            </th>
+                            <th style="width: 10%">
+                                COMMENTS
+                            </th>
                         </tr>
                     </thead>
                     <tbody id=coursesContent>
+                        <!--htmlCode-->
                     </tbody>
                 </table>
             </div>
+        </div>
+    </div>
+    <div class="container-fluid text-light mt-3 py-2" style="background-color: lightseagreen;">
+        <div clas="row">
+            <p class="text-center">
+                Copyright &copy; 2022
+            </p>
         </div>
     </div>
 </body>
@@ -75,14 +86,36 @@
                     htmlCode += "<td>" + coursesList[i]["description"] + "</td>";
                     htmlCode += "<td>" + coursesList[i]["priceValue"] + "</td>";
                     htmlCode += "<td>" + coursesList[i]["ratingValue"] + "</td>";
-                    htmlCode += "<td>" + coursesList[i]["author"]["fullName"] + "</td>";
+                    if (coursesList[i]["author"] != null) {
+                        htmlCode += "<td>" +
+                            coursesList[i]["author"]["fullName"] +
+                        "</td>";
+                    } else {
+                        htmlCode += "<td>none</td>";
+                    }
                     htmlCode += "<td>" + coursesList[i]["category"]["name"] + "</td>";
-                    // htmlCode += "<td>" + "<button class='btn btn-success btn-sm' onclick='toEnroll(coursesList[i][''id''])'>" +
-                    // htmlCode += "<td>" + "<button class='btn btn-success btn-sm' onclick='toEnroll()'>" +
-                    //             "ENROLL" + "</button>";
-                    htmlCode += "<td>" + "<button class='btn btn-success btn-sm' data-bs-toggle='modal' " +
-                                "data-bs-target='#enrollCourseModal'" + coursesList[i]["id"] + ">" +
-                                "ENROLL" + "</button>";
+                    if (coursesList[i]["content"] != null) {
+                        htmlCode += "<td>" +
+                            "<button id='btn_enroll' class='btn btn-success btn-sm' " +
+                                "onclick='toEnroll(" + coursesList[i]["id"] + ")'>" +
+                                "ENROLL" +
+                            "</button>" +
+                        "</td>";
+                    } else {
+                        htmlCode += "<td>" +
+                            "<button id='btn_enroll' class='btn btn-success btn-sm' disabled " +
+                                "onclick='toEnroll(" + coursesList[i]["id"] + ")'>" +
+                                "ENROLL" +
+                            "</button>" +
+                        "</td>";
+                    }
+                    htmlCode += "<td>" +
+                        "<button id='btn_comment' class='btn btn-primary btn-sm' " +
+                            "data-bs-toggle='modal' data-bs-target='#commentCourseModal'" +
+                            coursesList[i]["id"] + ">" +
+                            "COMMENTS" +
+                        "</button>" +
+                    "</td>";
                 htmlCode += "</tr>";
             }
             document.getElementById("coursesContent").innerHTML = htmlCode;
@@ -90,20 +123,26 @@
         xhttp.open("GET","http://localhost:8000/api/courses");
         xhttp.send();
     }
-    function toEnroll(){
-        var courseId = 3;
+    function toEnroll(courseId){
         var enrollObj = {
-            "userId": 3,
+            "userId": 3, //temp
             "courseId": courseId,
-            "comment": 'Super',
-            "userRating": 1
+            "comment": '',
+            "userRating": 0
         };
         var post = JSON.stringify(enrollObj);
         var xhr = new XMLHttpRequest();
 
-        xhr.open('POST', "/api/enroll", true);
+        xhr.open('POST', "http://localhost:8000/api/enroll", true);
         xhr.setRequestHeader('Content-type', 'application/json; charset=UTF-8');
         xhr.send(post);
+
+        xhr.onload = function (){
+            if(xhr.status === 201){
+                alert("You have successfully enrolled in the course");
+                // loadCourses();
+            }
+        }
     }
 </script>
 </html>

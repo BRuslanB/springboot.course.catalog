@@ -6,7 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
-<body onload="loadMyCourses()">
+<body onload="loadCourseList()">
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: lightseagreen;">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.html">COURSE CATALOG</a>
@@ -36,14 +36,21 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>NAME</th>
-                            <th>CONTENT</th>
+                            <th class="col-3">NAME</th>
+                            <th class="col-9">CONTENT</th>
                         </tr>
                     </thead>
-                    <tbody id=mycoursesContent>
-                    </tbody>
                 </table>
             </div>
+        </div>
+        <div class="row" id="divCourseList">
+        </div>
+    </div>
+    <div class="container-fluid text-light mt-3 py-2" style="background-color: lightseagreen;">
+        <div clas="row">
+            <p class="text-center">
+                Copyright &copy; 2022
+            </p>
         </div>
     </div>
 </body>
@@ -51,25 +58,135 @@
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
 </script>
 <script type="text/javascript">
-    function loadMyCourses() {
+
+    function loadCourseList() {
+        //alert("loadCourseList:"); //для проверки вызова
         const xhttp = new XMLHttpRequest();
-        xhttp.onload = function(){
-            const result = this.responseText;
-            var coursesList = JSON.parse(result);
-            console.log(result);
-            console.log(coursesList);
-            console.log(coursesList.length);
-            var htmlCode = "";
-            for (i=0; i<coursesList.length; i++){
-                htmlCode += "<tr>";
-                    htmlCode += "<td>" + coursesList[i]["name"] + "</td>";
-                    htmlCode += "<td>" + coursesList[i]["content"] + "</td>";
-                htmlCode += "</tr>";
-            }
-            document.getElementById("mycoursesContent").innerHTML = htmlCode;
-        }
         xhttp.open("GET","http://localhost:8000/api/enroll/" + "user@gmail.com");
+        
+        xhttp.onload = function(){
+            if (this.status == 200) {
+                const result = this.responseText;
+                var coursesList = JSON.parse(result);
+                // Проверка JSON.parse
+                // console.log(result);
+                // console.log(coursesList);
+                // console.log(coursesList.length);
+
+                var htmlCode = "";
+                var courseObj = [];
+                //создаем объект
+                courseObj[0] = {
+                    objectId: '',
+                    content: ''
+                };
+                // list course name
+                htmlCode += "<div class ='col-3'>";
+                    htmlCode += "<div class ='list-group' id='list-tab' role='tablist'>";
+                    for (i=0; i<coursesList.length; i++) {
+                        courseObj[i] = {
+                            objectId: "object_" + i,
+                            content: coursesList[i]["content"]
+                        };
+                        if (i == 0) {
+                            htmlCode += "<a class ='list-group-item list-group-item-action active' ";
+                        } else {
+                            htmlCode += "<a class ='list-group-item list-group-item-action' ";
+                        }
+                            htmlCode += "id='list-course" + coursesList[i]["id"] + "-list' ";
+                            htmlCode += "data-bs-toggle='list' ";
+                            htmlCode += "href='#list-course" + coursesList[i]["id"] + "' ";
+                            htmlCode += "role='tab' ";
+                            htmlCode += "aria-controls='list-course" + coursesList[i]["id"] + "'>";
+                            htmlCode += coursesList[i]["name"];
+                        htmlCode += "</a>";
+                    }
+                    htmlCode += "</div>"
+                htmlCode += "</div>"
+
+                // list pdf-content
+                var masObj = [];
+                htmlCode += "<div class='col-9'>";
+                    htmlCode += "<div class='tab-content' id='nav-tabContent'>";
+                        for (i=0; i<coursesList.length; i++) {
+                            masObj[i] = {
+                                objectId: "object_" + i
+                            };
+                            if (i == 0) {
+                                htmlCode += "<div class='tab-pane fade show active' ";
+                            } else {
+                                htmlCode += "<div class='tab-pane fade' ";
+                            }
+                            htmlCode += "id='list-course" + coursesList[i]["id"] + "' ";
+                            htmlCode += "role='tabpanel' ";
+                            htmlCode += "aria-labelledby='list-course" + coursesList[i]["id"] + "-list'>";
+                            htmlCode += "<object id='" + masObj[i].objectId + "' " +
+                                            "width='825px' height='600px'>";
+                            htmlCode +=  "</object>";
+                            htmlCode += "</div>";
+                        }
+                    htmlCode += "</div>";
+                htmlCode += "</div>";
+
+                //прорисовка divCourseList
+                document.getElementById("divCourseList").innerHTML = htmlCode;
+
+                //определение onclick()
+                for (i=0; i<coursesList.length; i++) {
+                    var link = document.getElementById("list-course" + coursesList[i]["id"] + "-list");
+                    link.onclick = function (object_id, course_Content) {
+                        return function () {
+                            loadContent(object_id, course_Content);
+                        };
+                    }(courseObj[i].objectId, courseObj[i].content);
+                }(i);
+
+                //вызов первого onclick() после загрузки формы
+                if (courseObj[0].objectId !== "" && courseObj[0].content !== "") {
+                    loadContent(courseObj[0].objectId, courseObj[0].content)
+                } else {
+                    console.log("failed")
+                }
+            }
+        }
         xhttp.send();
     }
+
+   function loadContent(object_id, course_Content) {
+        //проверка параметров
+        console.log(object_id + ", " + course_Content);
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://localhost:8000/api/contents/' + course_Content, true);
+        xhr.responseType = 'arraybuffer';
+
+        xhr.onload = function(e) {
+            if (this.status == 200) {
+                var blob = new Blob([this.response], {type:"application/pdf"});
+                var pdf_url = window.URL.createObjectURL(blob);
+                var my_embed = document.createElement('embed');
+                my_embed.setAttribute('src', pdf_url);
+                my_embed.setAttribute('type', 'application/pdf');
+                my_embed.setAttribute('width', '825px');
+                my_embed.setAttribute('height', '600px');
+                var theParent = document.getElementById(object_id);
+                //если элемент theParent существует
+                if (typeof(theParent) != 'undefined' && theParent != null) {
+                    while (theParent.hasChildNodes()) {
+                        theParent.removeChild(theParent.firstChild);
+                    }
+                    var my_p = document.createElement('p');
+                    my_p.setAttribute('innerText', 'This browser does not support PDFs. Please download the PDF to view it: ');
+                    var my_a = document.createElement('a');
+                    my_a.setAttribute('href', 'http://localhost:8000/api/contents/' + course_Content);
+                    my_a.setAttribute('target', '_blank');
+                    my_a.setAttribute('innerText', 'Download PDF');
+                    my_p.insertBefore(my_a, my_p.firstChild);
+                    theParent.insertBefore(my_p, theParent.firstChild);
+                    theParent.insertBefore(my_embed, theParent.firstChild);
+                }
+           }
+       }
+       xhr.send();
+   }
 </script>
 </html>

@@ -42,13 +42,13 @@
                     <td th:text="${crs.description}"></td>
                     <td th:text="${crs.price}"></td>
                     <td th:text="${crs.rating}"></td>
-                    <td th:if="${crs.getContentUrl().isEmpty()}">
+                    <td th:unless="${crs.getContentUrl()}">
                         <button class="btn btn-success btn-sm"
                                 data-bs-toggle="modal" th:data-bs-target="'#upload_contentCourseModal' + ${crs.id}"
                                 th:text="UPLOAD">
                         </button>
                     </td>
-                    <td th:unless="${crs.getContentUrl().isEmpty()}">
+                    <td th:if="${crs.getContentUrl()}">
                         <button class="btn btn-warning btn-sm"
                                 data-bs-toggle="modal" th:data-bs-target="'#upload_contentCourseModal' + ${crs.id}"
                                 th:text="REUPLOAD">
@@ -173,7 +173,7 @@
                                         <div class="row mt-2">
                                             <div class="col-12">
                                                 <input type="text" class="form-control" readonly
-                                                       th:value="${crs.author.fullName}">
+                                                       th:value="${crs.author != null ? crs.author.fullName : ''}">
                                             </div>
                                         </div>
                                         <div class="row mt-3">

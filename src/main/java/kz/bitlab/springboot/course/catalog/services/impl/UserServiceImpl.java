@@ -59,4 +59,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         }
         return null;
     }
+
+    public User saveUser(User user){
+        return userRepository.save(user);
+    }
 }
