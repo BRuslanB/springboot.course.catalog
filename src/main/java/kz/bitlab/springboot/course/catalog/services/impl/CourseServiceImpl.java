@@ -37,10 +37,10 @@ public class CourseServiceImpl implements CourseService {
     }
 
     public List<CourseDTO> getAllCoursesDTO(){
-        return courseMapper.toDtoList(courseRepository.findAll());
+        return courseMapper.toDtoList(courseRepository.findAllByOrderByIdAsc());
     }
 
     public List<Course> getAllCourses(){
-        return courseRepository.findAll();
+        return courseRepository.findAllByOrderByIdAsc();
     }
 }

@@ -40,10 +40,10 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     public List<Category> getAllCategories(){
-        return categoryRepository.findAll();
+        return categoryRepository.findAllByOrderByIdAsc();
     }
 
     public List<CategoryDTO> getAllCategoriesDTO(){
-        return categoryMapper.toDtoList(categoryRepository.findAll());
+        return categoryMapper.toDtoList(categoryRepository.findAllByOrderByIdAsc());
     }
 }

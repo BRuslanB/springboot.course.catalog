@@ -18,18 +18,34 @@ public class EnrollCardController {
 
     private final EnrollCardServiceImpl enrollCardService;
 
-    @GetMapping(value = "{username}")
+    @GetMapping(value = "/courses/{username}")
     public ResponseEntity<List<CourseDTO>> getAllUserCoursesDTO(@PathVariable(name="username") String userName){
         return new ResponseEntity<>(enrollCardService.getAllUserCoursesDTO(userName), HttpStatus.OK);
     }
 
-//    @GetMapping(value = "{id}")
-//    public ResponseEntity<List<CourseDTO>> getAllUserCoursesDTO(@PathVariable(name="id") Long id){
-//        return new ResponseEntity<>(enrollCardService.getAllUserCoursesDTO(id), HttpStatus.OK);
-//    }
+    @GetMapping(value = "/comments/{course_id}")
+    public ResponseEntity<List<EnrollCardDTO>> getAllCommentsDTO(@PathVariable(name="course_id") Long courseId){
+        return new ResponseEntity<>(enrollCardService.getAllCommentsDTO(courseId), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "{course_id}/{user_id}")
+    public ResponseEntity<EnrollCardDTO> getEnrollCardDTO(@PathVariable(name="course_id") Long courseId,
+                                                          @PathVariable(name="user_id") Long userId){
+        return new ResponseEntity<>(enrollCardService.getEnrollCardDTO(courseId, userId), HttpStatus.OK);
+    }
 
     @PostMapping
     public ResponseEntity<EnrollCardDTO> setEnrollCard(@RequestBody EnrollCardDTO enrollCardDTO){
         return new ResponseEntity<>(enrollCardService.setEnrollCard(enrollCardDTO), HttpStatus.CREATED);
+    }
+
+    @PutMapping
+    public ResponseEntity<EnrollCardDTO> updateEnrollCard(@RequestBody EnrollCardDTO enrollCardDTO){
+        return new ResponseEntity<>(enrollCardService.updateEnrollCard(enrollCardDTO), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping(value = "{id}")
+    public void deleteEnrollCard(@PathVariable(name="id") Long Id){
+        enrollCardService.deleteEnrollCard(Id);
     }
 }

@@ -14,4 +14,6 @@ import java.util.List;
 @Transactional
 public interface CourseRepository extends JpaRepository<Course, Long> {
     Long deleteByCategory(Category category);
+
+    List<Course> findAllByOrderByIdAsc();
 }

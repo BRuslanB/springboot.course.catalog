@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Courses Page</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 </head>
 <body onload="loadCourseList()">
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: lightseagreen;">
@@ -47,23 +47,22 @@
         </div>
     </div>
     <div class="container-fluid text-light mt-3 py-2" style="background-color: lightseagreen;">
-        <div clas="row">
+        <div class="row">
             <p class="text-center">
                 Copyright &copy; 2022
             </p>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+            crossorigin="anonymous">
+    </script>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
-</script>
 <script type="text/javascript">
-
     function loadCourseList() {
         //alert("loadCourseList:"); //для проверки вызова
         const xhttp = new XMLHttpRequest();
-        xhttp.open("GET","http://localhost:8000/api/enroll/" + "user@gmail.com");
-        
+        xhttp.open("GET","http://localhost:8000/api/enroll/courses/" + "user@gmail.com");
         xhttp.onload = function(){
             if (this.status == 200) {
                 const result = this.responseText;
@@ -72,7 +71,6 @@
                 // console.log(result);
                 // console.log(coursesList);
                 // console.log(coursesList.length);
-
                 var htmlCode = "";
                 var courseObj = [];
                 //создаем объект
@@ -103,7 +101,6 @@
                     }
                     htmlCode += "</div>"
                 htmlCode += "</div>"
-
                 // list pdf-content
                 var masObj = [];
                 htmlCode += "<div class='col-9'>";
@@ -127,10 +124,8 @@
                         }
                     htmlCode += "</div>";
                 htmlCode += "</div>";
-
                 //прорисовка divCourseList
-                document.getElementById("divCourseList").innerHTML = htmlCode;
-
+                divCourseList.innerHTML = htmlCode;
                 //определение onclick()
                 for (i=0; i<coursesList.length; i++) {
                     var link = document.getElementById("list-course" + coursesList[i]["id"] + "-list");
@@ -140,7 +135,6 @@
                         };
                     }(courseObj[i].objectId, courseObj[i].content);
                 }(i);
-
                 //вызов первого onclick() после загрузки формы
                 if (courseObj[0].objectId !== "" && courseObj[0].content !== "") {
                     loadContent(courseObj[0].objectId, courseObj[0].content)
@@ -158,7 +152,6 @@
         const xhr = new XMLHttpRequest();
         xhr.open('GET', 'http://localhost:8000/api/contents/' + course_Content, true);
         xhr.responseType = 'arraybuffer';
-
         xhr.onload = function(e) {
             if (this.status == 200) {
                 var blob = new Blob([this.response], {type:"application/pdf"});
