@@ -10,7 +10,7 @@ CREATE TABLE t_courses(
     name TEXT NOT NULL,
     description TEXT NOT NULL,
     price numeric(10,2) DEFAULT 0,
-    rating INT DEFAULT 0,
+    rating numeric(4,2) DEFAULT 0,
     author_id INT,
     category_id INT,
     content_url TEXT
@@ -19,6 +19,7 @@ CREATE TABLE t_courses(
 DROP TABLE IF EXISTS t_roles CASCADE;
 CREATE TABLE t_roles(
     id SERIAL PRIMARY KEY NOT NULL,
+    name TEXT NOT NULL,
     role TEXT NOT NULL
 );
 
@@ -42,6 +43,7 @@ CREATE TABLE t_enroll_cards(
       id SERIAL PRIMARY KEY NOT NULL,
       comment TEXT,
       rating INT DEFAULT 0,
+      point INT DEFAULT 0,
       course_id INT NOT NULL,
       user_id INT NOT NULL
 );

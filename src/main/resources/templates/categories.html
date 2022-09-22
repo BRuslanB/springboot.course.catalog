@@ -21,10 +21,12 @@
                 <tr class="fw-bold">
                     <td th:text="ID"></td>
                     <td th:text="NAME"></td>
-                    <td width="10%" sec:authorize="hasAnyRole('ROLE_ADMIN')"
+                    <td style="text-align: center; width: 10%"
+                        sec:authorize="hasAnyRole('ROLE_ADMIN')"
                         th:text="DETAILS">
                     </td>
-                    <td width="10%" sec:authorize="hasAnyRole('ROLE_ADMIN')"
+                    <td style="text-align: center; width: 10%"
+                        sec:authorize="hasAnyRole('ROLE_ADMIN')"
                         th:text="DELETE">
                     </td>
                 </tr>
@@ -33,13 +35,15 @@
                 <tr th:each="cat : ${allCategories}">
                     <td th:text="${cat.id}"></td>
                     <td th:text="${cat.name}"></td>
-                    <td sec:authorize="hasAnyRole('ROLE_ADMIN')">
+                    <td style="text-align: center;"
+                        sec:authorize="hasAnyRole('ROLE_ADMIN')">
                         <button class="btn btn-primary btn-sm"
                                 data-bs-toggle="modal" th:data-bs-target="'#editCategoryModal' + ${cat.id}"
                                 th:text="DETAILS">
                         </button>
                     </td>
-                    <td sec:authorize="hasAnyRole('ROLE_ADMIN')">
+                    <td style="text-align: center;"
+                        sec:authorize="hasAnyRole('ROLE_ADMIN')">
                         <button class="btn btn-danger btn-sm"
                                 data-bs-toggle="modal" th:data-bs-target="'#deleteCategoryModal' + ${cat.id}"
                                 th:text="DELETE">

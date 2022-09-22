@@ -1,29 +1,13 @@
 package kz.bitlab.springboot.course.catalog.rest;
 
-import kz.bitlab.springboot.course.catalog.dto.CourseDTO;
-import kz.bitlab.springboot.course.catalog.services.impl.CourseServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
-import org.codehaus.groovy.control.io.InputStreamReaderSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.swing.text.html.HTMLDocument;
-import java.awt.*;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
 import java.io.*;
-import java.nio.file.Files;
-import java.util.List;
-import java.util.Locale;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -72,48 +56,4 @@ public class ContentController {
         }
         return IOUtils.toByteArray(in);
     }
-
-//    @PostMapping(value = "{name}",
-//                 headers = "Accept=application/json",
-//                 produces = "application/pdf")
-//    public ResponseEntity<Resource> downloadCourseContent(@PathVariable(name="name") String file_name,
-//                                                          HttpServletRequest request,
-//                                                          @RequestBody Locale locale) throws IOException {
-//        String path_name = "C:/Users/rbaid/IdeaProjects/JavaSpringBoot/springboot.course.catalog/src/main/resources/static/contents/";
-//        String full_name = path_name + "default_content.pdf";
-//        if (!file_name.isEmpty()){
-//            full_name = path_name + file_name + ".pdf";
-//        }
-//        File filePDF = new File(full_name);
-//        HttpHeaders header = new HttpHeaders();
-//        header.setContentType(MediaType.parseMediaType("application/pdf"));
-//
-//        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + full_name);
-//        header.add("Cache-Control", "no-cache, no-store, must-revalidate");
-//        header.add("Pragma", "no-cache");
-//        header.add("Expires", "0");
-//
-//        InputStream targetStream = new FileInputStream(filePDF);
-//        Resource resource = new InputStreamResource(targetStream);
-//        return ResponseEntity.ok()
-//                .headers(header)
-//                .contentLength(filePDF.length())
-//                .contentType(MediaType.parseMediaType("application/pdf"))
-//                .body(resource);
-//    }
-//
-//    @GetMapping(value = "{name}")
-//    public ResponseEntity<?> getCourseContent(@PathVariable(name="name") String file_name) throws IOException {
-//        String path_name = "C:/Users/rbaid/IdeaProjects/JavaSpringBoot/springboot.course.catalog/src/main/resources/static/contents/";
-//        String full_name = path_name + "default_content.pdf";
-//        if (!file_name.isEmpty()){
-//            full_name = path_name + file_name + ".pdf";
-//        }
-//        File filePDF = new File(full_name);
-//        return ResponseEntity.ok()
-//                .header("fileName",full_name)
-//                .contentType(MediaType.parseMediaType("application/pdf"))
-//                .contentLength(filePDF.length())
-//                .body(new InputStreamResource(new ByteArrayInputStream(full_name.getBytes())));
-//    }
 }

@@ -1,5 +1,6 @@
 package kz.bitlab.springboot.course.catalog.services.impl;
 
+import kz.bitlab.springboot.course.catalog.model.Category;
 import kz.bitlab.springboot.course.catalog.model.Role;
 import kz.bitlab.springboot.course.catalog.model.User;
 import kz.bitlab.springboot.course.catalog.repository.RoleRepository;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserDetailsService, UserService {
@@ -58,6 +60,35 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             }
         }
         return null;
+    }
+
+    public User resetPassword(Long userId, String newPassword){
+        User user = userRepository.findById(userId).orElse(null);
+        if (user != null){
+            user.setPassword(passwordEncoder.encode(newPassword));
+            return userRepository.save(user);
+        }
+        return null;
+    }
+
+    public User updateProfile(User user, String fullName){
+        User currentUser = userRepository.findById(user.getId()).orElse(null);
+        if (currentUser != null){
+            currentUser.setFullName(fullName);
+        return userRepository.save(currentUser);
+        }
+        return null;
+    }
+
+    public User getUser(Long id){
+        return userRepository.findById(id).orElseThrow();
+    }
+
+    public User getUser(String userName){
+        return userRepository.findAllByEmail(userName);
+    }
+    public List<User> getAllUsers(){
+        return userRepository.findAllByOrderByIdAsc();
     }
 
     public User saveUser(User user){

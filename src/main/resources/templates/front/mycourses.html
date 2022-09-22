@@ -6,7 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 </head>
-<body onload="loadCourseList()">
+<body onload="loadMain()">
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: lightseagreen;">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.html">COURSE CATALOG</a>
@@ -26,6 +26,8 @@
                     <li class="nav-item">
                         <a class="nav-link" href="categories.html">All Categories</a>
                     </li>
+                </ul>
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0" id="ulUserMenu">
                 </ul>
             </div>
         </div>
@@ -59,10 +61,51 @@
     </script>
 </body>
 <script type="text/javascript">
+    var curUser;
+    function loadMain() {
+        this.curUser = localStorage.getItem('user');
+        var htmlCode = "";
+        if (curUser != null) {
+            htmlCode += "<li class='nav-item'>"
+                htmlCode += "<a class='nav-link'>" + curUser + "</a>"
+            htmlCode += "</li>"
+            htmlCode += "<li class='nav-item'>"
+                htmlCode += "<a class='nav-link' id='aSignOut'>SIGN OUT</a>"
+            htmlCode += "</li>"
+        } else {
+            htmlCode += "<li class='nav-item'>"
+                htmlCode += "<a class='nav-link' id='aSignIn'>SIGN IN AS</a>"
+            htmlCode += "</li>"
+            htmlCode += "<li class='nav-item'>"
+                htmlCode += "<a class='nav-link' href='http://localhost:8000/register'>SIGN UP</a>"
+            htmlCode += "</li>"
+        }
+        ulUserMenu.innerHTML = htmlCode;
+        if (curUser != null) {
+            aSignOut.onclick = function () {
+                delete localStorage.user;
+                curUser = null;
+                loadMain();
+            };
+        } else {
+            aSignIn.onclick = function () {
+                var name = '';
+                while (name === '') {
+                    name = prompt('Input Login User');
+                }
+                if (name != null){
+                    localStorage.setItem('user', name);
+                    loadMain();
+                }
+            }
+        }
+        loadCourseList();
+    }
+
     function loadCourseList() {
         //alert("loadCourseList:"); //для проверки вызова
         const xhttp = new XMLHttpRequest();
-        xhttp.open("GET","http://localhost:8000/api/enroll/courses/" + "user@gmail.com");
+        xhttp.open("GET","http://localhost:8000/api/enroll/courses/" + curUser);
         xhttp.onload = function(){
             if (this.status == 200) {
                 const result = this.responseText;
@@ -139,7 +182,7 @@
                 if (courseObj[0].objectId !== "" && courseObj[0].content !== "") {
                     loadContent(courseObj[0].objectId, courseObj[0].content)
                 } else {
-                    console.log("failed")
+                    //console.log("failed")
                 }
             }
         }
@@ -148,7 +191,7 @@
 
    function loadContent(object_id, course_Content) {
         //проверка параметров
-        console.log(object_id + ", " + course_Content);
+        //console.log(object_id + ", " + course_Content);
         const xhr = new XMLHttpRequest();
         xhr.open('GET', 'http://localhost:8000/api/contents/' + course_Content, true);
         xhr.responseType = 'arraybuffer';
@@ -163,7 +206,7 @@
                 my_embed.setAttribute('height', '600px');
                 var theParent = document.getElementById(object_id);
                 //если элемент theParent существует
-                if (typeof(theParent) != 'undefined' && theParent != null) {
+                if (typeof(theParent) !== 'undefined' && theParent !== null) {
                     while (theParent.hasChildNodes()) {
                         theParent.removeChild(theParent.firstChild);
                     }

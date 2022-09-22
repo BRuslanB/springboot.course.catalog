@@ -9,8 +9,9 @@ public class EnrollCardDTO {
     private Long id;
     private String comment;
     private int userRating;
-//    private CourseDTO courseDTO;
-    private Long courseId;
-//    private UserDTO userDTO;
-    private Long userId;
+    private int point;
+    private CourseDTO course;
+//    private Long courseId;
+    private UserDTO user;
+//    private Long userId;
 }

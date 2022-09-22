@@ -1,0 +1,91 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate = "layout/main.html"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<div layout:fragment = "mainContent">
+    <!-- List of Courses -->
+    <div class="row">
+        <div class="col-12 mt-3">
+            <div th:each="crs : ${allCoursesByAuthor}">
+                <!-- Course name -->
+                <div class="row">
+                    <div class="col-12 mt-3">
+                        <label class="fw-bold" style="color: darkblue;" th:text="${crs.name}"></label>
+                    </div>
+                </div>
+                <!-- List of Students -->
+                <div class="row">
+                    <div class="col-12 mt-3">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr class="fw-bold">
+                                    <td th:text="${'№'}"></td>
+                                    <td th:text="${'FULL NAME'}"></td>
+                                    <td th:text="POINT"></td>
+                                    <td style="text-align: center; width: 10%"
+                                        th:text="ACTION">
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="enr : ${allEnrollCards}" th:if="${enr.course.id == crs.id}">
+                                    <td th:text="${enr.id}"></td>
+                                    <td th:text="${enr.user.fullName}"></td>
+                                    <td th:text="${enr.point}"></td>
+                                    <td style="text-align: center;">
+                                        <button class="btn btn-primary btn-sm"
+                                                data-bs-toggle="modal" th:data-bs-target="'#setPointModal' + ${enr.id}"
+                                                th:text="${'SET POINT'}">
+                                        </button>
+                                    </td>
+                                    <!-- Modal Set Point for Student -->
+                                    <div class="modal fade" th:id="'setPointModal' + ${enr.id}"
+                                         data-bs-backdrop="static" data-bs-keyboard="false"
+                                         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <form th:action="@{'/setpointstudent'}" method="post">
+                                                    <input type="hidden" name="enroll_card_id" th:value="${enr.id}">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title"
+                                                            th:text="${'SET POINT FOR STUDENT'}">
+                                                        </h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row mt-3">
+                                                            <div class="col-12">
+                                                                <label th:text="POINT"></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mt-2">
+                                                            <div class="col-12">
+                                                                <input type="number" class="form-control" name="enroll_card_point"
+                                                                       min="0" max="100" step="1" th:value="${enr.point}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                                                th:text="CLOSE">
+                                                        </button>
+                                                        <button class="btn btn-primary"
+                                                                th:text="SAVE">
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

@@ -14,6 +14,12 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{'/courses'}" th:text="Courses"></a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{'/students'}" th:text="Students"></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{'/users'}" th:text="Users"></a>
+                </li>
             </ul>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0" sec:authorize = "!isAuthenticated()">
                 <li class="nav-item">

@@ -20,15 +20,18 @@ public class EnrollCard {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne
-    private User user;
+    @Column(name="comment")
+    private String comment;
+
+    @Column(name = "rating")
+    private int userRating; // 1,2,3,4,5 {User Rating for Course}
+
+    @Column(name = "point")
+    private int point; // {Point Course from Teacher}
 
     @ManyToOne
     private Course course;
 
-    @Column(name = "rating")
-    private int userRating; // 1,2,3,4,5 {User Rating}
-
-    @Column(name="comment")
-    private String comment;
+    @ManyToOne
+    private User user;
 }

@@ -1,0 +1,156 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate = "layout/main.html"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<div layout:fragment = "mainContent">
+    <!-- List of Users -->
+    <div class="row">
+        <div class="col-12 mt-3">
+            <table class="table table-striped">
+                <thead>
+                    <tr class="fw-bold">
+                        <td th:text="ID"></td>
+                        <td th:text="EMAIL"></td>
+                        <td th:text="${'FULL NAME'}"></td>
+                        <td style="text-align: center; width: 10%"
+                            sec:authorize="hasAnyRole('ROLE_ADMIN')"
+                            th:text="DETAILS">
+                        </td>
+                        <td style="text-align: center; width: 10%"
+                            sec:authorize="hasAnyRole('ROLE_ADMIN')"
+                            th:text="PASSWORD">
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="usr : ${allUsers}">
+                        <td th:text="${usr.id}"></td>
+                        <td th:text="${usr.email}"></td>
+                        <td th:text="${usr.fullName}"></td>
+                        <td style="text-align: center;"
+                            sec:authorize="hasAnyRole('ROLE_ADMIN')">
+                            <button class="btn btn-primary btn-sm"
+                                    data-bs-toggle="modal" th:data-bs-target="'#editUserPofileModal' + ${usr.id}"
+                                    th:text="DETAILS">
+                            </button>
+                        </td>
+                        <td style="text-align: center;"
+                            sec:authorize="hasAnyRole('ROLE_ADMIN')">
+                            <button class="btn btn-danger btn-sm"
+                                    data-bs-toggle="modal" th:data-bs-target="'#resetUserPasswordModal' + ${usr.id}"
+                                    th:text="RESET">
+                            </button>
+                        </td>
+                        <!-- Modal Edit User Profile -->
+                        <div class="modal fade" th:id="'editUserPofileModal' + ${usr.id}"
+                             data-bs-backdrop="static" data-bs-keyboard="false"
+                             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <form th:action="@{'/edituserprofile'}" method="post">
+                                        <input type="hidden" name="user_id" th:value="${usr.id}">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title"
+                                                th:text="${'EDIT USER PROFILE'}">
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row mt-3">
+                                                <div class="col-12">
+                                                    <label th:text="EMAIL"></label>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col-12">
+                                                    <input type="text" class="form-control" readonly
+                                                           th:value="${usr.email}">
+                                                </div>
+                                            </div>
+                                            <div class="row mt-3">
+                                                <div class="col-12">
+                                                    <label th:text="${'FULL NAME'}"></label>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col-12">
+                                                    <input type="text" class="form-control" name="user_full_name" required
+                                                           th:value="${usr.fullName}">
+                                                </div>
+                                            </div>
+                                            <div class="row mt-3">
+                                                <div class="col-12">
+                                                    <label th:text="ROLES"></label>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col-12">
+                                                    <div class="form-check" th:each="rol : ${allRoles}">
+                                                        <input class="form-check-input" type="checkbox"
+                                                               th:checked="${usr.getRoles().contains(rol)}"
+                                                               th:id="${'flexCheckRole' + rol.id}"
+                                                               th:name="${'user_role' + rol.id}"
+                                                               th:value="${rol.id}">
+                                                        <label class="form-check-label"
+                                                               th:for="${'flexCheckRole' + rol.id}"
+                                                               th:text="${rol.name}">
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                                    th:text="CLOSE">
+                                            </button>
+                                            <button class="btn btn-primary"
+                                                    th:text="SAVE">
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal RESET USER PASSWORD -->
+                        <div class="modal fade" th:id="'resetUserPasswordModal' + ${usr.id}"
+                             data-bs-backdrop="static" data-bs-keyboard="false"
+                             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form th:action="@{'/resetuserpassword'}" method="post">
+                                        <input type="hidden" name="user_id" th:value="${usr.id}">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" th:text="${'RESET NEW USER PASSWORD'}"></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row mt-3">
+                                                <div class="col-12">
+                                                    <label th:text="${'USER PASSWORD'}"></label>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col-12">
+                                                    <input type="password" class="form-control" name="user_new_password" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                                    th:text="CANCEL"></button>
+                                            <button class="btn btn-danger" th:text="SAVE"></button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</html>

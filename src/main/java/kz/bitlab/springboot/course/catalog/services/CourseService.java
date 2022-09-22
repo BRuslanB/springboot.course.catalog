@@ -14,4 +14,5 @@ public interface CourseService {
     CourseDTO getCourseDTO(Long id);
     List<CourseDTO> getAllCoursesDTO();
     List<Course> getAllCourses();
+    List<Course> getAllCoursesByAuthor(Long authorId);
 }

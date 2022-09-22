@@ -1,7 +1,7 @@
 package kz.bitlab.springboot.course.catalog.api;
 
-import kz.bitlab.springboot.course.catalog.services.impl.CourseServiceImpl;
-import kz.bitlab.springboot.course.catalog.services.impl.FileUploadServiceImpl;
+import kz.bitlab.springboot.course.catalog.model.*;
+import kz.bitlab.springboot.course.catalog.services.impl.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -10,27 +10,21 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import kz.bitlab.springboot.course.catalog.model.Category;
-import kz.bitlab.springboot.course.catalog.model.Course;
-import kz.bitlab.springboot.course.catalog.model.User;
-import kz.bitlab.springboot.course.catalog.services.impl.CategoryServiceImpl;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
 
-//    @Value("${uploadContentURL}")
-//    private String fileUploadContentURL;
-
-//    @Value("${uploadAvatarURL}")
-//    private String fileUploadAvatarURL;
-
     private final CategoryServiceImpl categoryService;
     private final CourseServiceImpl courseService;
     private final FileUploadServiceImpl fileUploadService;
+    private final UserServiceImpl userService;
+    private final RoleServiceImpl roleService;
+    private final EnrollCardServiceImpl enrollCardService;
 
     @GetMapping("/")
     public String indexPage(Model model) {
@@ -114,7 +108,7 @@ public class HomeController {
     public String addCourse(@RequestParam(name = "course_name") String courseName,
                             @RequestParam(name = "course_description") String courseDescription,
                             @RequestParam(name = "course_price") double coursePrice,
-                            @RequestParam(name = "course_rating") int courseRating,
+                            //@RequestParam(name = "course_rating") double courseRating,
                             @RequestParam(name = "course_category_id") Long categoryId){
 
         Course course = new Course();
@@ -124,8 +118,7 @@ public class HomeController {
             course.setName(courseName);
             course.setDescription(courseDescription);
             course.setPrice(coursePrice);
-            course.setRating(courseRating);
-            //course.setAuthor(getCurrentUser());
+            //course.setRating(courseRating);
             courseService.addCourse(course);
         }
         return "redirect:/courses";
@@ -137,7 +130,6 @@ public class HomeController {
                              @RequestParam(name = "course_name") String courseName,
                              @RequestParam(name = "course_description") String courseDescription,
                              @RequestParam(name = "course_price") double coursePrice,
-                             @RequestParam(name = "course_rating") int courseRating,
                              @RequestParam(name = "course_category_id") Long categoryId) {
 
         Course course = courseService.getCourse(courseId);
@@ -148,7 +140,6 @@ public class HomeController {
                 course.setName(courseName);
                 course.setDescription(courseDescription);
                 course.setPrice(coursePrice);
-                course.setRating(courseRating);
                 courseService.saveCourse(course);
             }
         }
@@ -158,20 +149,100 @@ public class HomeController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/deletecourse")
     public String deleteCourse(@RequestParam(name = "course_id") Long courseId) {
-
         Course course = courseService.getCourse(courseId);
         if (course != null)
             courseService.deleteCourse(course);
         return "redirect:/courses";
     }
 
-    private User getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            return (User) authentication.getPrincipal();
-        }
-        return null;
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/users")
+    public String usersPage(Model model) {
+        List<User> allUsers= userService.getAllUsers();
+        List<Role> allRoles= roleService.getAllRoles();
+        model.addAttribute("allUsers", allUsers);
+        model.addAttribute("allRoles", allRoles);
+        return "users";
     }
+
+    @PreAuthorize("hasAnyRole('ROLE_TEACHER')")
+    @GetMapping("/students")
+    public String studentsPage(Model model) {
+        //получить все карточки юзеров
+        List<EnrollCard> allEnrollCards = enrollCardService.getAllEnrollCards();
+        // получить все курсы текущего пользователя (Teacher) из каталога курсов
+        List<Course> allCoursesByAuthor = courseService.getAllCoursesByAuthor(getCurrentUser().getId());
+
+        model.addAttribute("allEnrollCards", allEnrollCards);
+        model.addAttribute("allCoursesByAuthor", allCoursesByAuthor);
+        return "students";
+    }
+
+
+    @PreAuthorize("hasAnyRole('ROLE_TEACHER')")
+    @PostMapping("/setpointstudent")
+    public String saveUserProfile(@RequestParam(name = "enroll_card_id") Long enrollCardId,
+                                  @RequestParam(name = "enroll_card_point") int studentPoint) {
+
+        EnrollCard enrollCard = enrollCardService.getEnrollCard(enrollCardId);
+        if (enrollCard != null) {
+            enrollCard.setPoint(studentPoint);
+            enrollCardService.saveEnrollCard(enrollCard);
+        }
+        return "redirect:/students";
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PostMapping("/edituserprofile")
+    public String saveUserProfile(@RequestParam(name = "user_id") Long userId,
+                                  @RequestParam(name = "user_full_name") String fullName,
+                                  @RequestParam(name = "user_role1", required = false) Long roleId1,
+                                  @RequestParam(name = "user_role2", required = false) Long roleId2,
+                                  @RequestParam(name = "user_role3", required = false) Long roleId3) {
+
+        User user = userService.getUser(userId);
+        if (user != null) {
+            ArrayList<Role> roles = new ArrayList<>();
+            if (roleId1 != null) {
+                Role userRole1 = roleService.getRole(roleId1);
+                roles.add(userRole1);
+            }
+            if (roleId2 != null) {
+                Role userRole2 = roleService.getRole(roleId2);
+                roles.add(userRole2);
+            }
+            if (roleId3 != null) {
+                Role userRole3 = roleService.getRole(roleId3);
+                roles.add(userRole3);
+            }
+            user.setRoles(roles);
+            user.setFullName(fullName);
+            userService.saveUser(user);
+        }
+        return "redirect:/users";
+    }
+
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+//    @PostMapping("/edituserprofile")
+//    public String saveUserProfile(@RequestParam(name = "user_id") Long userId,
+//                                  @RequestParam(name = "user_full_name") String fullName,
+//                                  @RequestParam(value = "user_roles", required = false) List<Long> rolesList) {
+//
+//        User user = userService.getUser(userId);
+//        if (user != null) {
+//            ArrayList<Role> roles = new ArrayList<>();
+//            for (roleId : rolesList) {
+//                if (roleId != null) {
+//                    Role userRole = roleService.getRole(roleId);
+//                    roles.add(userRole);
+//                }
+//            }
+//            user.setRoles(roles);
+//            user.setFullName(fullName);
+//            userService.saveUser(user);
+//        }
+//        return "redirect:/users";
+//    }
 
     @PreAuthorize("hasAnyRole('ROLE_TEACHER')")
     @PostMapping(value = "/uploadcontent")
@@ -183,48 +254,11 @@ public class HomeController {
         return "redirect:/courses";
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @PostMapping(value = "/uploadavatar")
-    public String uploadAvatar(@RequestParam(name = "user_avatar") MultipartFile file){
-        if (file.getContentType().equals("image/jpeg") || file.getContentType().equals("image/png")){
-            fileUploadService.uploadUserAvatar(file, getCurrentUser());
+    private User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            return (User) authentication.getPrincipal();
         }
-        return "redirect:/profile";
+        return null;
     }
-
-//    @GetMapping(value = "/content/{url}", produces = MediaType.APPLICATION_PDF_VALUE)
-//    public @ResponseBody byte[] content(@PathVariable(name = "url", required = false) String url) throws IOException {
-//        String pdfURL = fileUploadContentURL + "default_content.pdf";
-//        if (!url.isEmpty()){
-//            pdfURL = fileUploadContentURL +  url + ".pdf";
-//        }
-//        InputStream in;
-//        try{
-//            ClassPathResource classPathResource = new ClassPathResource(pdfURL);
-//            in = classPathResource.getInputStream();
-//        }catch(Exception e){
-//            pdfURL = fileUploadContentURL + "default_content.pdf";
-//            ClassPathResource classPathResource = new ClassPathResource(pdfURL);
-//            in = classPathResource.getInputStream();
-//        }
-//        return IOUtils.toByteArray(in);
-//    }
-//
-//    @GetMapping(value = "/avatar/{url}", produces = MediaType.IMAGE_JPEG_VALUE)
-//    public @ResponseBody byte[] avatar(@PathVariable(name = "url", required = false) String url) throws IOException{
-//        String picURL = fileUploadAvatarURL + "default_avatar.jpg";
-//        if (!url.isEmpty()) {
-//            picURL = fileUploadAvatarURL +  url + ".jpg";
-//        }
-//        InputStream in;
-//        try{
-//            ClassPathResource classPathResource = new ClassPathResource(picURL);
-//            in = classPathResource.getInputStream();
-//        }catch(Exception e){
-//            picURL = fileUploadAvatarURL + "default_avatar.jpg";
-//            ClassPathResource classPathResource = new ClassPathResource(picURL);
-//            in = classPathResource.getInputStream();
-//        }
-//        return IOUtils.toByteArray(in);
-//    }
 }

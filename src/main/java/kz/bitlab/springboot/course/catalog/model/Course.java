@@ -33,7 +33,7 @@ public class Course {
     private double price;
 
     @Column(name = "rating")
-    private int rating; // 1,2,3,4,5 {Summary Rating}
+    private double rating; // {Average Rating}
 
     @Column(name="content_url")
     private String contentUrl;

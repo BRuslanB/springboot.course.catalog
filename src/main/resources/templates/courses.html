@@ -23,15 +23,19 @@
                     <td th:text="NAME"></td>
                     <td th:text="DESCRIPTION"></td>
                     <td th:text="PRICE"></td>
-                    <td th:text="RATING"></td>
+                    <td style="text-align: center;"
+                        th:text="RATING"></td>
                     <td sec:authorize="hasAnyRole('ROLE_TEACHER')"
-                        th:text="CONTENT" style="width: 10%">
+                        th:text="CONTENT" style="text-align: center; width: 10%">
+                    </td>
+                    <td sec:authorize="hasAnyRole('ROLE_TEACHER')"
+                        th:text="PREVIEW" style="text-align: center; width: 10%">
                     </td>
                     <td sec:authorize="hasAnyRole('ROLE_ADMIN')"
-                        th:text="${'VIEW MORE'}" style="width: 10%">
+                        th:text="DETAILS" style="text-align: center; width: 10%">
                     </td>
                     <td sec:authorize="hasAnyRole('ROLE_ADMIN')"
-                        th:text="DELETE" style="width: 10%">
+                        th:text="DELETE" style="text-align: center; width: 10%">
                     </td>
                 </tr>
                 </thead>
@@ -41,26 +45,44 @@
                     <td th:text="${crs.name}"></td>
                     <td th:text="${crs.description}"></td>
                     <td th:text="${crs.price}"></td>
-                    <td th:text="${crs.rating}"></td>
-                    <td th:unless="${crs.getContentUrl()}">
+                    <td style="text-align: center;"
+                        th:text="${crs.rating}"></td>
+                    <td style="text-align: center;"
+                        sec:authorize="hasAnyRole('ROLE_TEACHER')"
+                        th:unless="${crs.getContentUrl()}">
                         <button class="btn btn-success btn-sm"
                                 data-bs-toggle="modal" th:data-bs-target="'#upload_contentCourseModal' + ${crs.id}"
                                 th:text="UPLOAD">
                         </button>
                     </td>
-                    <td th:if="${crs.getContentUrl()}">
+                    <td style="text-align: center;"
+                        sec:authorize="hasAnyRole('ROLE_TEACHER')"
+                        th:if="${crs.getContentUrl()}">
                         <button class="btn btn-warning btn-sm"
                                 data-bs-toggle="modal" th:data-bs-target="'#upload_contentCourseModal' + ${crs.id}"
                                 th:text="REUPLOAD">
                         </button>
                     </td>
-                    <td sec:authorize="hasAnyRole('ROLE_ADMIN')">
+                    <td style="text-align: center;"
+                        sec:authorize="hasAnyRole('ROLE_TEACHER')"
+                        th:if="${crs.getContentUrl()}">
+                        <a class="btn btn-primary btn-sm" th:text="PREVIEW" target="_blank"
+                            th:href="${'api/contents/' + crs.contentUrl}">
+                        </a>
+                    </td>
+                    <td style="text-align: center;"
+                        sec:authorize="hasAnyRole('ROLE_TEACHER')"
+                        th:unless="${crs.getContentUrl()}">
+                    </td>
+                    <td style="text-align: center;"
+                        sec:authorize="hasAnyRole('ROLE_ADMIN')">
                         <button class="btn btn-primary btn-sm"
                                 data-bs-toggle="modal" th:data-bs-target="'#editCourseModal' + ${crs.id}"
                                 th:text="DETAILS">
                         </button>
                     </td>
-                    <td sec:authorize="hasAnyRole('ROLE_ADMIN')">
+                    <td style="text-align: center;"
+                        sec:authorize="hasAnyRole('ROLE_ADMIN')">
                         <button class="btn btn-danger btn-sm"
                                 data-bs-toggle="modal" th:data-bs-target="'#deleteCourseModal' + ${crs.id}"
                                 th:text="DELETE">
@@ -144,13 +166,28 @@
                                         </div>
                                         <div class="row mt-3">
                                             <div class="col-12">
+                                                <label th:text="GATEGORY"></label>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-12">
+                                                <select class="form-select" name="course_category_id" required>
+                                                    <option th:each="cat : ${allCategories}"
+                                                            th:text="${cat.name}"
+                                                            th:value="${cat.id}"
+                                                            th:selected="${crs.category.id != null && crs.category.id == cat.id}">
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col-12">
                                                 <label th:text="RATING"></label>
                                             </div>
                                         </div>
                                         <div class="row mt-2">
                                             <div class="col-12">
-                                                <input type="number" class="form-control" name="course_rating" required
-                                                       min="1" max="5" step="1"
+                                                <input type="number" class="form-control" readonly
                                                        th:value="${crs.rating}">
                                             </div>
                                         </div>
@@ -174,22 +211,6 @@
                                             <div class="col-12">
                                                 <input type="text" class="form-control" readonly
                                                        th:value="${crs.author != null ? crs.author.fullName : ''}">
-                                            </div>
-                                        </div>
-                                        <div class="row mt-3">
-                                            <div class="col-12">
-                                                <label th:text="GATEGORY"></label>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-2">
-                                            <div class="col-12">
-                                                <select class="form-select" name="course_category_id" required>
-                                                    <option th:each="cat : ${allCategories}"
-                                                            th:text="${cat.name}"
-                                                            th:value="${cat.id}"
-                                                            th:selected="${crs.category.id != null && crs.category.id == cat.id}">
-                                                    </option>
-                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -281,17 +302,17 @@
                                        min="0" step="0.01">
                             </div>
                         </div>
-                        <div class="row mt-3">
-                            <div class="col-12">
-                                <label th:text="RATING"></label>
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-12">
-                                <input type="number" class="form-control" name="course_rating" required
-                                       min="1" max="5" step="1">
-                            </div>
-                        </div>
+<!--                        <div class="row mt-3">-->
+<!--                            <div class="col-12">-->
+<!--                                <label th:text="RATING"></label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="row mt-2">-->
+<!--                            <div class="col-12">-->
+<!--                                <input type="number" class="form-control" name="course_rating" required-->
+<!--                                       min="1" max="5" step="1">-->
+<!--                            </div>-->
+<!--                        </div>-->
                          <div class="row mt-3">
                             <div class="col-12">
                                 <label th:text="GATEGORY"></label>

@@ -3,22 +3,32 @@ package kz.bitlab.springboot.course.catalog.services;
 import kz.bitlab.springboot.course.catalog.dto.CourseDTO;
 import kz.bitlab.springboot.course.catalog.dto.EnrollCardDTO;
 import kz.bitlab.springboot.course.catalog.model.Course;
+import kz.bitlab.springboot.course.catalog.model.EnrollCard;
 
 import java.util.List;
 
 public interface EnrollCardService {
-    EnrollCardDTO getEnrollCardDTO(Long courseId, Long userId);
+    EnrollCardDTO getEnrollCardByCourseAndUserDTO(Long courseId, String userName);
     EnrollCardDTO setEnrollCard(EnrollCardDTO enrollDTO);
 
     EnrollCardDTO updateEnrollCard(EnrollCardDTO enrollCardDTO);
 
-    List<EnrollCardDTO> getAllCommentsDTO(Long courseId);
-    List<Course> getAllUserCourses(Long userId);
+    EnrollCard getEnrollCard(Long id);
+    List<EnrollCard> getAllEnrollCards();
+    List<EnrollCardDTO> getAllEnrollCardsByCourseDTO(Long courseId);
 
-    List<CourseDTO> getAllUserCoursesDTO(Long userId);
+    List<EnrollCard> getAllEnrollCardsByCourse(Long courseId);
 
-    List<Course> getAllUserCourses(String username);
-    List<CourseDTO> getAllUserCoursesDTO(String username);
+    //List<Course> getAllCoursesByUser(Long userId);
+
+    //List<CourseDTO> getAllCoursesByUserDTO(Long userId);
+
+    List<Course> getAllCoursesByUser(String userName);
+    List<CourseDTO> getAllCoursesByUserDTO(String userName);
+
+    EnrollCard saveEnrollCard(EnrollCard enrollCard);
 
     void deleteEnrollCard(Long id);
+
+    void updateCourseRating(Long courseId);
 }

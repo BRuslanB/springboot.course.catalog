@@ -1,9 +1,8 @@
 package kz.bitlab.springboot.course.catalog.api;
 
-import kz.bitlab.springboot.course.catalog.services.UserService;
+import kz.bitlab.springboot.course.catalog.services.impl.FileUploadServiceImpl;
 import kz.bitlab.springboot.course.catalog.services.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,12 +13,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import kz.bitlab.springboot.course.catalog.model.User;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequiredArgsConstructor
 public class SecurityController {
 
     private final UserServiceImpl userService;
+    private final FileUploadServiceImpl fileUploadService;
 
     @GetMapping("/enter")
     public String enterPage(Model model) {
@@ -49,6 +50,18 @@ public class SecurityController {
         return "redirect:/register?error";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PostMapping("/resetuserpassword")
+    public String resetUserPassword(@RequestParam(name = "user_id") Long userId,
+                                 @RequestParam(name = "user_new_password") String newPassword) {
+
+        User user = userService.resetPassword(userId, newPassword);
+        if (user != null) {
+            return "redirect:/users?success";
+        }
+        return "redirect:/users?error";
+    }
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/updatepassword")
     public String updatePassword(@RequestParam(name = "user_old_password") String oldPassword,
@@ -56,12 +69,32 @@ public class SecurityController {
                                  @RequestParam(name = "user_re_new_password") String repeatNewPassword) {
 
         if (newPassword.equals(repeatNewPassword)) {
-            User updatePassword = userService.updatePassword(getCurrentUser(), oldPassword, newPassword);
-            if (updatePassword != null) {
+            User user = userService.updatePassword(getCurrentUser(), oldPassword, newPassword);
+            if (user != null) {
                 return "redirect:/profile?success";
             }
         }
         return "redirect:/profile?error";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/updateprofile")
+    public String updateProfile(@RequestParam(name = "user_full_name") String fullName) {
+
+        User user = userService.updateProfile(getCurrentUser(), fullName);
+        if (user != null) {
+            return "redirect:/profile?success";
+        }
+        return "redirect:/profile?error";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping(value = "/uploadavatar")
+    public String uploadAvatar(@RequestParam(name = "user_avatar") MultipartFile file){
+        if (file.getContentType().equals("image/jpeg") || file.getContentType().equals("image/png")){
+            fileUploadService.uploadUserAvatar(file, getCurrentUser());
+        }
+        return "redirect:/profile";
     }
 
     @PreAuthorize("isAuthenticated()")

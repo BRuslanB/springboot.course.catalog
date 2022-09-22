@@ -19,29 +19,34 @@ public class EnrollCardController {
     private final EnrollCardServiceImpl enrollCardService;
 
     @GetMapping(value = "/courses/{username}")
-    public ResponseEntity<List<CourseDTO>> getAllUserCoursesDTO(@PathVariable(name="username") String userName){
-        return new ResponseEntity<>(enrollCardService.getAllUserCoursesDTO(userName), HttpStatus.OK);
+    public List<CourseDTO> getAllCoursesByUserDTO(@PathVariable(name="username") String userName){
+        return enrollCardService.getAllCoursesByUserDTO(userName);
     }
 
     @GetMapping(value = "/comments/{course_id}")
-    public ResponseEntity<List<EnrollCardDTO>> getAllCommentsDTO(@PathVariable(name="course_id") Long courseId){
-        return new ResponseEntity<>(enrollCardService.getAllCommentsDTO(courseId), HttpStatus.OK);
+    public List<EnrollCardDTO> getAllEnrollCardsByCourseDTO(@PathVariable(name="course_id") Long courseId){
+        return enrollCardService.getAllEnrollCardsByCourseDTO(courseId);
     }
 
-    @GetMapping(value = "{course_id}/{user_id}")
-    public ResponseEntity<EnrollCardDTO> getEnrollCardDTO(@PathVariable(name="course_id") Long courseId,
-                                                          @PathVariable(name="user_id") Long userId){
-        return new ResponseEntity<>(enrollCardService.getEnrollCardDTO(courseId, userId), HttpStatus.OK);
+    @GetMapping(value = "{course_id}/{user_name}")
+    public EnrollCardDTO getEnrollCardByCourseAndUserDTO(@PathVariable(name="course_id") Long courseId,
+                                          @PathVariable(name="user_name") String userName){
+        return enrollCardService.getEnrollCardByCourseAndUserDTO(courseId, userName);
     }
 
     @PostMapping
     public ResponseEntity<EnrollCardDTO> setEnrollCard(@RequestBody EnrollCardDTO enrollCardDTO){
-        return new ResponseEntity<>(enrollCardService.setEnrollCard(enrollCardDTO), HttpStatus.CREATED);
+        EnrollCardDTO resEnrollCardDTO = enrollCardService.setEnrollCard(enrollCardDTO);
+        if (resEnrollCardDTO != null) {
+            return new ResponseEntity<>(resEnrollCardDTO, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        }
     }
 
     @PutMapping
-    public ResponseEntity<EnrollCardDTO> updateEnrollCard(@RequestBody EnrollCardDTO enrollCardDTO){
-        return new ResponseEntity<>(enrollCardService.updateEnrollCard(enrollCardDTO), HttpStatus.CREATED);
+    public EnrollCardDTO updateEnrollCard(@RequestBody EnrollCardDTO enrollCardDTO){
+        return enrollCardService.updateEnrollCard(enrollCardDTO);
     }
 
     @DeleteMapping(value = "{id}")

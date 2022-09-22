@@ -39,7 +39,9 @@ public class CourseServiceImpl implements CourseService {
     public List<CourseDTO> getAllCoursesDTO(){
         return courseMapper.toDtoList(courseRepository.findAllByOrderByIdAsc());
     }
-
+    public List<Course> getAllCoursesByAuthor(Long authorId){
+        return courseRepository.findByAuthorIdAllCourses(authorId);
+    }
     public List<Course> getAllCourses(){
         return courseRepository.findAllByOrderByIdAsc();
     }

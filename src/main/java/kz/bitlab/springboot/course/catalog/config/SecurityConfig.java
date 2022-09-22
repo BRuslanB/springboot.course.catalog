@@ -1,6 +1,5 @@
 package kz.bitlab.springboot.course.catalog.config;
 
-import kz.bitlab.springboot.course.catalog.services.UserService;
 import kz.bitlab.springboot.course.catalog.services.impl.UserServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
