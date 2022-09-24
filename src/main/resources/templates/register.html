@@ -4,8 +4,12 @@
       xmlns:th="http://www.thymeleaf.org"
       layout:decorate="layout/main.html">
 <div layout:fragment="mainContent">
-    <!-- SIGN IN -->
-    <div class="row">
+    <div class="row flex-content col-10 mx-auto">
+        <div class="col-6 mt-4 mx-auto">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ77KanS20v_tx_XbphA3lIt7zsdNAZM3CRFw&usqp=CAU"
+                 width="80%" th:align="center">
+        </div>
+        <!-- SIGN IN -->
         <div class="col-4 mt-3 mx-auto">
             <form th:action="@{'/toregister'}" method="post">
                 <div class="row mt-3">

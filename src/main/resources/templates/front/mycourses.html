@@ -20,12 +20,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="mycourses.html">My Courses</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="courses.html">All Courses</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="categories.html">All Categories</a>
-                    </li>
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="courses.html">All Courses</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="categories.html">All Categories</a>-->
+<!--                    </li>-->
                 </ul>
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0" id="ulUserMenu">
                 </ul>
@@ -107,7 +107,7 @@
         const xhttp = new XMLHttpRequest();
         xhttp.open("GET","http://localhost:8000/api/enroll/courses/" + curUser);
         xhttp.onload = function(){
-            if (this.status == 200) {
+            if (this.status === 200) {
                 const result = this.responseText;
                 var coursesList = JSON.parse(result);
                 // Проверка JSON.parse
@@ -129,7 +129,7 @@
                             objectId: "object_" + i,
                             content: coursesList[i]["content"]
                         };
-                        if (i == 0) {
+                        if (i === 0) {
                             htmlCode += "<a class ='list-group-item list-group-item-action active' ";
                         } else {
                             htmlCode += "<a class ='list-group-item list-group-item-action' ";
@@ -196,7 +196,7 @@
         xhr.open('GET', 'http://localhost:8000/api/contents/' + course_Content, true);
         xhr.responseType = 'arraybuffer';
         xhr.onload = function(e) {
-            if (this.status == 200) {
+            if (this.status === 200) {
                 var blob = new Blob([this.response], {type:"application/pdf"});
                 var pdf_url = window.URL.createObjectURL(blob);
                 var my_embed = document.createElement('embed');

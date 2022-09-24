@@ -31,10 +31,12 @@ public class ContentController {
         try{
             ClassPathResource classPathResource = new ClassPathResource(pdfURL);
             in = classPathResource.getInputStream();
+//            in = new FileInputStream(pdfURL);
         }catch(Exception e){
             pdfURL = fileUploadContentURL + "default_content.pdf";
             ClassPathResource classPathResource = new ClassPathResource(pdfURL);
             in = classPathResource.getInputStream();
+//            in = new FileInputStream(pdfURL);
         }
         return IOUtils.toByteArray(in);
     }
@@ -49,10 +51,12 @@ public class ContentController {
         try{
             ClassPathResource classPathResource = new ClassPathResource(picURL);
             in = classPathResource.getInputStream();
+//            in = new FileInputStream(picURL);
         }catch(Exception e){
             picURL = fileUploadAvatarURL + "default_avatar.jpg";
             ClassPathResource classPathResource = new ClassPathResource(picURL);
             in = classPathResource.getInputStream();
+//            in = new FileInputStream(picURL);
         }
         return IOUtils.toByteArray(in);
     }

@@ -19,10 +19,6 @@ public interface EnrollCardService {
 
     List<EnrollCard> getAllEnrollCardsByCourse(Long courseId);
 
-    //List<Course> getAllCoursesByUser(Long userId);
-
-    //List<CourseDTO> getAllCoursesByUserDTO(Long userId);
-
     List<Course> getAllCoursesByUser(String userName);
     List<CourseDTO> getAllCoursesByUserDTO(String userName);
 

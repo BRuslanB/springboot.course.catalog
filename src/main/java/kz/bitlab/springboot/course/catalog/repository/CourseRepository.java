@@ -18,4 +18,8 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     @Query("SELECT c FROM Course c WHERE c.author.id = :author_id ORDER BY c.id DESC")
     List<Course> findByAuthorIdAllCourses(Long author_id);
+
+//    @Query("SELECT DISTINCT c.category FROM Course c WHERE c.author.id = :author_id ORDER BY c.id DESC")
+//    List<Category> findByAuthorIdAllCategories(Long author_id);
+
 }

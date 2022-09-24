@@ -1,6 +1,7 @@
 package kz.bitlab.springboot.course.catalog.services;
 
 import kz.bitlab.springboot.course.catalog.dto.CourseDTO;
+import kz.bitlab.springboot.course.catalog.model.Category;
 import kz.bitlab.springboot.course.catalog.model.Course;
 
 import java.util.List;
@@ -15,4 +16,5 @@ public interface CourseService {
     List<CourseDTO> getAllCoursesDTO();
     List<Course> getAllCourses();
     List<Course> getAllCoursesByAuthor(Long authorId);
+    //List<Category> getAllCategoriesByAuthor(Long authorId);
 }

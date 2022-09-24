@@ -105,14 +105,6 @@ public class EnrollCardServiceImpl implements EnrollCardService {
         }
     }
 
-//    public List<Course> getAllCoursesByUser(Long userId){
-//        return enrollCardRepository.findByIdAllUserCourses(userId);
-//    }
-
-//    public List<CourseDTO> getAllCoursesByUserDTO(Long userId) {
-//        return courseMapper.toDtoList(enrollCardRepository.findByIdAllUserCourses(userId));
-//    }
-
     public List<Course> getAllCoursesByUser(String userName) {
         return enrollCardRepository.findByNameAllUserCourses(userName);
     }

@@ -15,9 +15,6 @@ public interface EnrollCardRepository extends JpaRepository<EnrollCard, Long> {
 
     List<EnrollCard> findAllByOrderByIdAsc();
 
-//    @Query("SELECT c.course FROM EnrollCard c WHERE c.user.id = :user_id ORDER BY c.id DESC")
-//    List<Course> findByIdAllUserCourses(Long user_id);
-
     @Query("SELECT c.course FROM EnrollCard c WHERE c.user.email = :user_name ORDER BY c.id DESC")
     List<Course> findByNameAllUserCourses(String user_name);
 
@@ -26,5 +23,4 @@ public interface EnrollCardRepository extends JpaRepository<EnrollCard, Long> {
 
     @Query("SELECT c FROM EnrollCard c WHERE c.course.id = :course_id AND c.user.email = :user_name")
     EnrollCard findByAllCourseAndUser(Long course_id, String user_name);
-
 }

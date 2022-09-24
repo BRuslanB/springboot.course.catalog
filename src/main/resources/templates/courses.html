@@ -6,338 +6,340 @@
 <div layout:fragment = "mainContent">
     <!-- Button Add Course -->
     <div class="row" sec:authorize="hasAnyRole('ROLE_ADMIN')">
-        <div class="col-12 my-2">
+        <div class="col-12 mt-2 mb-1">
             <button type="button" class="button_style"
                     data-bs-toggle="modal" data-bs-target="#addCourseModal"
                     th:text="${'+Add Course'}">
             </button>
         </div>
     </div>
-    <!-- List of Courses -->
+    <!-- List of Categories -->
     <div class="row">
-        <div class="col-12 mt-3">
-            <table class="table table-striped">
-                <thead>
-                <tr class="fw-bold">
-                    <td th:text="ID"></td>
-                    <td th:text="NAME"></td>
-                    <td th:text="DESCRIPTION"></td>
-                    <td th:text="PRICE"></td>
-                    <td style="text-align: center;"
-                        th:text="RATING"></td>
-                    <td sec:authorize="hasAnyRole('ROLE_TEACHER')"
-                        th:text="CONTENT" style="text-align: center; width: 10%">
-                    </td>
-                    <td sec:authorize="hasAnyRole('ROLE_TEACHER')"
-                        th:text="PREVIEW" style="text-align: center; width: 10%">
-                    </td>
-                    <td sec:authorize="hasAnyRole('ROLE_ADMIN')"
-                        th:text="DETAILS" style="text-align: center; width: 10%">
-                    </td>
-                    <td sec:authorize="hasAnyRole('ROLE_ADMIN')"
-                        th:text="DELETE" style="text-align: center; width: 10%">
-                    </td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="crs : ${allCourses}">
-                    <td th:text="${crs.id}"></td>
-                    <td th:text="${crs.name}"></td>
-                    <td th:text="${crs.description}"></td>
-                    <td th:text="${crs.price}"></td>
-                    <td style="text-align: center;"
-                        th:text="${crs.rating}"></td>
-                    <td style="text-align: center;"
-                        sec:authorize="hasAnyRole('ROLE_TEACHER')"
-                        th:unless="${crs.getContentUrl()}">
-                        <button class="btn btn-success btn-sm"
-                                data-bs-toggle="modal" th:data-bs-target="'#upload_contentCourseModal' + ${crs.id}"
-                                th:text="UPLOAD">
-                        </button>
-                    </td>
-                    <td style="text-align: center;"
-                        sec:authorize="hasAnyRole('ROLE_TEACHER')"
-                        th:if="${crs.getContentUrl()}">
-                        <button class="btn btn-warning btn-sm"
-                                data-bs-toggle="modal" th:data-bs-target="'#upload_contentCourseModal' + ${crs.id}"
-                                th:text="REUPLOAD">
-                        </button>
-                    </td>
-                    <td style="text-align: center;"
-                        sec:authorize="hasAnyRole('ROLE_TEACHER')"
-                        th:if="${crs.getContentUrl()}">
-                        <a class="btn btn-primary btn-sm" th:text="PREVIEW" target="_blank"
-                            th:href="${'api/contents/' + crs.contentUrl}">
-                        </a>
-                    </td>
-                    <td style="text-align: center;"
-                        sec:authorize="hasAnyRole('ROLE_TEACHER')"
-                        th:unless="${crs.getContentUrl()}">
-                    </td>
-                    <td style="text-align: center;"
-                        sec:authorize="hasAnyRole('ROLE_ADMIN')">
-                        <button class="btn btn-primary btn-sm"
-                                data-bs-toggle="modal" th:data-bs-target="'#editCourseModal' + ${crs.id}"
-                                th:text="DETAILS">
-                        </button>
-                    </td>
-                    <td style="text-align: center;"
-                        sec:authorize="hasAnyRole('ROLE_ADMIN')">
-                        <button class="btn btn-danger btn-sm"
-                                data-bs-toggle="modal" th:data-bs-target="'#deleteCourseModal' + ${crs.id}"
-                                th:text="DELETE">
-                        </button>
-                    </td>
-                    <!-- Modal Upload Content Course -->
-                    <div class="modal fade" th:id="'upload_contentCourseModal' + ${crs.id}"
-                         data-bs-backdrop="static" data-bs-keyboard="false"
-                         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <form th:action="@{'/uploadcontent'}" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" name="course_id" th:value="${crs.id}">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" th:text="${'UPLOAD CONTENT'}"></h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
+        <div class="col-12 mt-2">
+            <div th:each="cat : ${allCategories}">
+                <!-- Categories name -->
+                <div class="row">
+                    <div class="col-12 mt-2">
+                        <label class="fw-bold" style="color: darkblue;" th:text="${cat.name}"></label>
+                    </div>
+                </div>
+                <!-- List of Courses -->
+                <div class="row">
+                    <div class="col-12 mt-2">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr class="fw-bold">
+                                <td th:text="ID"></td>
+                                <td th:text="NAME"></td>
+                                <td th:text="DESCRIPTION"></td>
+                                <td th:text="PRICE"></td>
+                                <td style="text-align: center;"
+                                    th:text="RATING"></td>
+                                <td sec:authorize="hasAnyRole('ROLE_TEACHER')"
+                                    th:text="CONTENT" style="text-align: center; width: 10%">
+                                </td>
+                                <td sec:authorize="hasAnyRole('ROLE_TEACHER')"
+                                    th:text="PREVIEW" style="text-align: center; width: 10%">
+                                </td>
+                                <td sec:authorize="hasAnyRole('ROLE_ADMIN')"
+                                    th:text="DETAILS" style="text-align: center; width: 10%">
+                                </td>
+                                <td sec:authorize="hasAnyRole('ROLE_ADMIN')"
+                                    th:text="DELETE" style="text-align: center; width: 10%">
+                                </td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="crs : ${allCourses}" th:if="${crs.category.id == cat.id}">
+                                <td th:text="${crs.id}"></td>
+                                <td th:text="${crs.name}"></td>
+                                <td th:text="${crs.description}"></td>
+                                <td th:text="${crs.price}"></td>
+                                <td style="text-align: center;"
+                                    th:text="${crs.rating}"></td>
+                                <td style="text-align: center;"
+                                    sec:authorize="hasAnyRole('ROLE_TEACHER')"
+                                    th:unless="${crs.getContentUrl()}">
+                                    <button class="btn btn-success btn-sm"
+                                            data-bs-toggle="modal" th:data-bs-target="'#upload_contentCourseModal' + ${crs.id}"
+                                            th:text="UPLOAD">
+                                    </button>
+                                </td>
+                                <td style="text-align: center;"
+                                    sec:authorize="hasAnyRole('ROLE_TEACHER')"
+                                    th:if="${crs.getContentUrl()}">
+                                    <button class="btn btn-warning btn-sm"
+                                            data-bs-toggle="modal" th:data-bs-target="'#upload_contentCourseModal' + ${crs.id}"
+                                            th:text="REUPLOAD">
+                                    </button>
+                                </td>
+                                <td style="text-align: center;"
+                                    sec:authorize="hasAnyRole('ROLE_TEACHER')"
+                                    th:if="${crs.getContentUrl()}">
+                                    <a class="btn btn-primary btn-sm" th:text="PREVIEW" target="_blank"
+                                        th:href="${'api/contents/' + crs.contentUrl}">
+                                    </a>
+                                </td>
+                                <td style="text-align: center;"
+                                    sec:authorize="hasAnyRole('ROLE_TEACHER')"
+                                    th:unless="${crs.getContentUrl()}">
+                                </td>
+                                <td style="text-align: center;"
+                                    sec:authorize="hasAnyRole('ROLE_ADMIN')">
+                                    <button class="btn btn-primary btn-sm"
+                                            data-bs-toggle="modal" th:data-bs-target="'#editCourseModal' + ${crs.id}"
+                                            th:text="DETAILS">
+                                    </button>
+                                </td>
+                                <td style="text-align: center;"
+                                    sec:authorize="hasAnyRole('ROLE_ADMIN')">
+                                    <button class="btn btn-danger btn-sm"
+                                            data-bs-toggle="modal" th:data-bs-target="'#deleteCourseModal' + ${crs.id}"
+                                            th:text="DELETE">
+                                    </button>
+                                </td>
+                                <!-- Modal Upload Content Course -->
+                                <div class="modal fade" th:id="'upload_contentCourseModal' + ${crs.id}"
+                                     data-bs-backdrop="static" data-bs-keyboard="false"
+                                     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form th:action="@{'/uploadcontent'}" method="post" enctype="multipart/form-data">
+                                                <input type="hidden" name="course_id" th:value="${crs.id}">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" th:text="${'UPLOAD CONTENT'}"></h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h6 th:text="${'Select file to upload content'}"></h6>
+                                                    <input type="file" name="course_content">
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                                            th:text="CANCEL"></button>
+                                                    <button class="btn btn-primary" th:text="DOWNLOAD"></button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
-                                    <div class="modal-body">
-                                        <h6 th:text="${'Select file to upload content'}"></h6>
-                                        <input type="file" name="course_content">
+                                </div>
+                                <!-- Modal Edit Course -->
+                                <div class="modal fade" th:id="'editCourseModal' + ${crs.id}"
+                                     data-bs-backdrop="static" data-bs-keyboard="false"
+                                     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <form th:action="@{'/editcourse'}" method="post">
+                                                <input type="hidden" name="course_id" th:value="${crs.id}">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title"
+                                                        th:text="${'EDIT COURSE'}">
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row mt-3">
+                                                        <div class="col-12">
+                                                            <label th:text="NAME"></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2">
+                                                        <div class="col-12">
+                                                            <input type="text" class="form-control" name="course_name" required
+                                                                   th:value="${crs.name}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-3">
+                                                        <div class="col-12">
+                                                            <label th:text="DESCRIPTION"></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2">
+                                                        <div class="col-12">
+                                                            <textarea class="form-control" name="course_description" required
+                                                                      th:text="${crs.description}"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-3">
+                                                        <div class="col-12">
+                                                            <label th:text="PRICE"></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2">
+                                                        <div class="col-12">
+                                                            <input type="number" class="form-control" name="course_price" required
+                                                                   min="0" max="99999999" step="0.01"
+                                                                   th:value="${crs.price}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-3">
+                                                        <div class="col-12">
+                                                            <label th:text="GATEGORY"></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2">
+                                                        <div class="col-12">
+                                                            <select class="form-select" name="course_category_id" required>
+                                                                <option th:each="cat : ${allCategories}"
+                                                                        th:text="${cat.name}"
+                                                                        th:value="${cat.id}"
+                                                                        th:selected="${crs.category.id != null && crs.category.id == cat.id}">
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-3">
+                                                        <div class="col-12">
+                                                            <label th:text="RATING"></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2">
+                                                        <div class="col-12">
+                                                            <input type="number" class="form-control" readonly
+                                                                   th:value="${crs.rating}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-3">
+                                                        <div class="col-12">
+                                                            <label th:text="${'FILE CONTENT'}"></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2">
+                                                        <div class="col-12">
+                                                            <input type="text" class="form-control" readonly
+                                                                   th:value="${crs.contentUrl}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-3">
+                                                        <div class="col-12">
+                                                            <label th:text="AUTHOR"></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2">
+                                                        <div class="col-12">
+                                                            <input type="text" class="form-control" readonly
+                                                                   th:value="${crs.author != null ? crs.author.fullName : ''}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                                            th:text="CLOSE">
+                                                    </button>
+                                                    <button class="btn btn-primary"
+                                                            th:text="SAVE">
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                                th:text="CANCEL"></button>
-                                        <button class="btn btn-primary" th:text="DOWNLOAD"></button>
+                                </div>
+                                <!-- Modal Delete Course -->
+                                <div class="modal fade" th:id="'deleteCourseModal' + ${crs.id}"
+                                     data-bs-backdrop="static" data-bs-keyboard="false"
+                                     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form th:action="@{'/deletecourse'}" method="post">
+                                                <input type="hidden" name="course_id" th:value="${crs.id}">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" th:text="${'DELETE COURSE'}"></h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h6 th:text="${'Do you want to remove the Course?'}"></h6>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                                            th:text="CANCEL"></button>
+                                                    <button class="btn btn-danger" th:text="DELETE"></button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
-                                </form>
-                            </div>
+                                </div>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Modal Add Course -->
+                <div class="modal fade" id="addCourseModal"
+                     data-bs-backdrop="static" data-bs-keyboard="false"
+                     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <form th:action="@{'/addcourse'}" method="post">
+                                <div class="modal-header">
+                                    <h5 class="modal-title"
+                                        th:text="${'ADD COURSE'}">
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row mt-3">
+                                        <div class="col-12">
+                                            <label th:text="NAME"></label>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-12">
+                                            <input type="text" class="form-control" name="course_name" required>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-12">
+                                            <label th:text="DESCRIPTION"></label>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-12">
+                                            <textarea class="form-control" name="course_description" required></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-12">
+                                            <label th:text="PRICE"></label>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-12">
+                                            <input type="number" class="form-control" name="course_price" required
+                                                   min="0" max="99999999" step="0.01">
+                                        </div>
+                                    </div>
+                                     <div class="row mt-3">
+                                        <div class="col-12">
+                                            <label th:text="GATEGORY"></label>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-12">
+                                            <select class="form-select" name="course_category_id" required>
+                                                <option th:each="cat : ${allCategories}"
+                                                        th:text="${cat.name}"
+                                                        th:value="${cat.id}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                            th:text="CLOSE">
+                                    </button>
+                                    <button class="btn btn-primary"
+                                            th:text="ADD">
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                    <!-- Modal Edit Course -->
-                    <div class="modal fade" th:id="'editCourseModal' + ${crs.id}"
-                         data-bs-backdrop="static" data-bs-keyboard="false"
-                         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <form th:action="@{'/editcourse'}" method="post">
-                                    <input type="hidden" name="course_id" th:value="${crs.id}">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title"
-                                            th:text="${'EDIT COURSE'}">
-                                        </h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row mt-3">
-                                            <div class="col-12">
-                                                <label th:text="NAME"></label>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-2">
-                                            <div class="col-12">
-                                                <input type="text" class="form-control" name="course_name" required
-                                                       th:value="${crs.name}">
-                                            </div>
-                                        </div>
-                                        <div class="row mt-3">
-                                            <div class="col-12">
-                                                <label th:text="DESCRIPTION"></label>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-2">
-                                            <div class="col-12">
-                                                <textarea class="form-control" name="course_description" required
-                                                          th:text="${crs.description}"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-3">
-                                            <div class="col-12">
-                                                <label th:text="PRICE"></label>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-2">
-                                            <div class="col-12">
-                                                <input type="number" class="form-control" name="course_price" required
-                                                       min="0" step="0.01"
-                                                       th:value="${crs.price}">
-                                            </div>
-                                        </div>
-                                        <div class="row mt-3">
-                                            <div class="col-12">
-                                                <label th:text="GATEGORY"></label>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-2">
-                                            <div class="col-12">
-                                                <select class="form-select" name="course_category_id" required>
-                                                    <option th:each="cat : ${allCategories}"
-                                                            th:text="${cat.name}"
-                                                            th:value="${cat.id}"
-                                                            th:selected="${crs.category.id != null && crs.category.id == cat.id}">
-                                                    </option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-3">
-                                            <div class="col-12">
-                                                <label th:text="RATING"></label>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-2">
-                                            <div class="col-12">
-                                                <input type="number" class="form-control" readonly
-                                                       th:value="${crs.rating}">
-                                            </div>
-                                        </div>
-                                        <div class="row mt-3">
-                                            <div class="col-12">
-                                                <label th:text="${'FILE CONTENT'}"></label>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-2">
-                                            <div class="col-12">
-                                                <input type="text" class="form-control" readonly
-                                                       th:value="${crs.contentUrl}">
-                                            </div>
-                                        </div>
-                                        <div class="row mt-3">
-                                            <div class="col-12">
-                                                <label th:text="AUTHOR"></label>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-2">
-                                            <div class="col-12">
-                                                <input type="text" class="form-control" readonly
-                                                       th:value="${crs.author != null ? crs.author.fullName : ''}">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                                th:text="CLOSE">
-                                        </button>
-                                        <button class="btn btn-primary"
-                                                th:text="SAVE">
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Modal Delete Course -->
-                    <div class="modal fade" th:id="'deleteCourseModal' + ${crs.id}"
-                         data-bs-backdrop="static" data-bs-keyboard="false"
-                         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <form th:action="@{'/deletecourse'}" method="post">
-                                    <input type="hidden" name="course_id" th:value="${crs.id}">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" th:text="${'DELETE COURSE'}"></h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <h6 th:text="${'Do you want to remove the Course?'}"></h6>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                                th:text="CANCEL"></button>
-                                        <button class="btn btn-danger" th:text="DELETE"></button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <!-- Modal Add Course -->
-    <div class="modal fade" id="addCourseModal"
-         data-bs-backdrop="static" data-bs-keyboard="false"
-         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <form th:action="@{'/addcourse'}" method="post">
-                    <div class="modal-header">
-                        <h5 class="modal-title"
-                            th:text="${'ADD COURSE'}">
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row mt-3">
-                            <div class="col-12">
-                                <label th:text="NAME"></label>
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-12">
-                                <input type="text" class="form-control" name="course_name" required>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-12">
-                                <label th:text="DESCRIPTION"></label>
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-12">
-                                <textarea class="form-control" name="course_description" required></textarea>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-12">
-                                <label th:text="PRICE"></label>
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-12">
-                                <input type="number" class="form-control" name="course_price" required
-                                       min="0" step="0.01">
-                            </div>
-                        </div>
-<!--                        <div class="row mt-3">-->
-<!--                            <div class="col-12">-->
-<!--                                <label th:text="RATING"></label>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="row mt-2">-->
-<!--                            <div class="col-12">-->
-<!--                                <input type="number" class="form-control" name="course_rating" required-->
-<!--                                       min="1" max="5" step="1">-->
-<!--                            </div>-->
-<!--                        </div>-->
-                         <div class="row mt-3">
-                            <div class="col-12">
-                                <label th:text="GATEGORY"></label>
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-12">
-                                <select class="form-select" name="course_category_id" required>
-                                    <option th:each="cat : ${allCategories}"
-                                            th:text="${cat.name}"
-                                            th:value="${cat.id}">
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                th:text="CLOSE">
-                        </button>
-                        <button class="btn btn-primary"
-                                th:text="ADD">
-                        </button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>

@@ -42,6 +42,10 @@ public class CourseServiceImpl implements CourseService {
     public List<Course> getAllCoursesByAuthor(Long authorId){
         return courseRepository.findByAuthorIdAllCourses(authorId);
     }
+
+//    public List<Category> getAllCategoriesByAuthor(Long authorId){
+//        return courseRepository.findByAuthorIdAllCategories(authorId);
+//    }
     public List<Course> getAllCourses(){
         return courseRepository.findAllByOrderByIdAsc();
     }

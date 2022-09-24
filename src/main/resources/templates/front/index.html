@@ -20,31 +20,159 @@
                     <li class="nav-item">
                         <a class="nav-link" href="mycourses.html">My Courses</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="courses.html">All Courses</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="categories.html">All Categories</a>
-                    </li>
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="courses.html">All Courses</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="categories.html">All Categories</a>-->
+<!--                    </li>-->
                 </ul>
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0" id="ulUserMenu">
                 </ul>
             </div>
         </div>
     </nav>
-    <div class="container mt-3" style="min-height: 600px;">
-        <div class="row">
-            <div class="col-12">
-                <h3 class="text-center mt-3">DEAR USER WELCOME TO COURSE CATALOG</h3>
+    <div class="container mt-3 mx-auto" style="min-height: 600px;">
+        <!-- Cards of Course -->
+        <div class="col-12 card-deck row mx-auto" id="cardCoursesList">
+        </div>
+    </div>
+    <!-- Modal Details Course -->
+    <div class="modal fade" id="itemCourseModal" tabindex="-1"
+         aria-labelledby="eModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eModalLabel">View details course</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                    <div class="modal-body">
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <label style="font-weight: bold;">PRICE: </label>
+                                <input type="number" id="valCoursePrice" class="text-primary"
+                                       style="border-style: none;" readonly>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <label style="font-weight: bold;">RATING: </label>
+                                <input type="number" id="valCourseRating" class="text-primary"
+                                       style="border-style: none;" readonly>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <label style="font-weight: bold;">AUTHOR: </label>
+                                <input type="text" id="valCourseAuthor"
+                                       style="border-style: none;" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                    </div>
+                </form>
             </div>
         </div>
-        <div class="row mt-5">
-            <div class="col-8 offset-2">
-                <p class="text-success fs-3 fw-bold">
-                    Our platform contains courses that will help you decide on a direction and just try
-                    programming right now. Register on the portal and take training at any convenient
-                    time! Learn, develop and build a successful career in IT!
-                </p>
+    </div>
+    <!-- Comments Course Modal -->
+    <div class="modal fade" id="itemCommentsModal" tabindex="-1"
+         aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">View all course comments</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row d-flex flex-column">
+                        <input type="hidden" id="valEnrollCardId1">
+                        <div class="row d-flex flex-row">
+                            <div class="col-10">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label class="fw-bold">MY REVIEW OF THE COURSE</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-12">
+                                        <textarea class="form-control" id="valTextComment"
+                                                  rows="4" required></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label class="fw-bold">ESTIMATE</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-1">
+                                    <div class="col-12">
+                                        <input type="number" class="form-control" id="valUserRating"
+                                               required min="1" max="5" step="1">
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-12">
+                                        <label class="fw-bold" style="color: darkred">SCORE</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-1">
+                                    <div class="col-12">
+                                        <input type="number" class="form-control" id="valUserPoint"
+                                               style="background-color: whitesmoke;" readonly>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <hr class="mt-3">
+                        </div>
+                    </div>
+                    <div class="row d-flex flex-row">
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-striped" id="tableCommentsList">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary"
+                            data-bs-dismiss="modal"
+                            onclick="saveCommentsModal()">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Unenroll approve Modal -->
+    <div class="modal fade" id="itemUnenrollModal" tabindex="-1"
+         aria-labelledby="exModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exModalLabel">View all course comments</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="hidden" id="valEnrollCardId2">
+                            <h5>Are you sure you want to unenrolled?</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger"
+                            data-bs-dismiss="modal"
+                            onclick="approveUnenrollModal()">Yes</button>
+                </div>
             </div>
         </div>
     </div>
@@ -65,7 +193,6 @@
     var curUser;
     function loadMain() {
         this.curUser = localStorage.getItem('user');
-//        alert('user='+curUser);
         var htmlCode = "";
         if (curUser != null) {
             htmlCode += "<li class='nav-item'>"
@@ -104,6 +231,268 @@
                 }
             }
         }
+    loadCourses();
+    }
+
+    function loadCourses() {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function(){
+            if (this.status == 200) {
+                const result = this.responseText;
+                var coursesList = JSON.parse(result);
+                var htmlCode = "";
+                if (curUser != null) {
+                    for (i = 0; i < coursesList.length; i++) {
+                        htmlCode += "<div class='col-4 p-2 mt-2 mx-auto'>";
+                            htmlCode += "<div class='card border-light shadow rounded'>";
+                                htmlCode += "<div class='card-header bg-light text-center'>";
+                                    htmlCode += coursesList[i]["category"]["name"];
+                                htmlCode += "</div>";
+                                htmlCode += "<div class='card-body text-center'>";
+                                    htmlCode += "<h5 class='card-title text-success'>";
+                                        htmlCode += coursesList[i]["name"];
+                                    htmlCode += "</h5>";
+                                    htmlCode += "<div id='div_det" + coursesList[i]["id"] + "'>";
+                                    htmlCode += "</div>";
+                                    htmlCode += "<p class='card-text text-black-50 mt-1'>";
+                                        htmlCode += coursesList[i]["description"];
+                                    htmlCode += "</p>";
+                                    htmlCode += "<div id='div_act" + coursesList[i]["id"] + "'>";
+                                    htmlCode += "</div>";
+                                    htmlCode += "<div id='div_com" + coursesList[i]["id"] + "'>";
+                                    htmlCode += "</div>";
+                                htmlCode += "</div>";
+                            htmlCode += "</div>";
+                        htmlCode += "</div>";
+                    }
+                }
+                //прорисовка cardCoursesList
+                cardCoursesList.innerHTML = htmlCode;
+                //добавление кнопок
+                if (curUser != null) {
+                    for (i = 0; i < coursesList.length; i++) {
+                        getCardEnrollId(coursesList[i]["id"])
+                    }
+                }
+            }
+        }
+        xhttp.open("GET","http://localhost:8000/api/courses");
+        xhttp.send();
+    }
+
+    function getCardEnrollId(courseId) {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function(){
+            if (this.readyState == 4 && this.status == 200) {
+                const result = this.responseText;
+                var res;
+                try{
+                    var itemCardEnroll = JSON.parse(result);
+                    res = itemCardEnroll["id"];
+                }catch(ex){
+                    res = null;
+                }
+                var parent_det = document.getElementById("div_det" + courseId);
+                var my_link_details = document.createElement('a');
+                my_link_details.setAttribute("class", 'mt-1');
+                my_link_details.innerHTML = 'Details';
+                my_link_details.onclick = function (courseID) {
+                    return function () {
+                        openDetailsModal(courseID);
+                    };
+                }(courseId);
+                if (typeof(parent_det) !== 'undefined' && parent_det !== null) {
+                    parent_det.appendChild(my_link_details);
+                }
+                var parent_act = document.getElementById("div_act" + courseId);
+                var parent_com = document.getElementById("div_com" + courseId);
+                var my_btn_enroll = document.createElement('button');
+                var my_btn_unenroll = document.createElement('button');
+                var my_btn_comment = document.createElement('button');
+                //console.log("res="+res);
+                if (res !== null && res !== undefined) {
+                    my_btn_unenroll.setAttribute("class", 'btn btn-warning btn-sm');
+                    my_btn_unenroll.innerHTML = 'UNENROLL &nbsp';
+                    my_btn_unenroll.onclick = function (enrollCardId) {
+                        return function () {
+                            openUnenrollModal(enrollCardId);
+                        };
+                    }(res);
+                    if (typeof(parent_act) !== 'undefined' && parent_act !== null) {
+                        parent_act.appendChild(my_btn_unenroll);
+                    }
+                    my_btn_comment.setAttribute("class", 'btn btn-primary btn-sm mt-2');
+                    my_btn_comment.innerHTML = 'COMMENTS';
+                    my_btn_comment.onclick = function (courseID, enrollCardId) {
+                        return function () {
+                            openCommentsModal(courseID, enrollCardId);
+                        };
+                    }(courseId, res);
+                    if (typeof(parent_com) !== 'undefined' && parent_com !== null) {
+                        parent_com.appendChild(my_btn_comment);
+                    }
+                } else {
+                    my_btn_enroll.setAttribute("class", 'btn btn-success btn-sm');
+                    my_btn_enroll.innerHTML = '&nbsp &nbsp ENROLL &nbsp &nbsp';
+                    my_btn_enroll.onclick = function (courseID) {
+                        return function () {
+                            toEnroll(courseID);
+                        };
+                    }(courseId);
+                    if (typeof(parent_act) !== 'undefined' && parent_act !== null) {
+                        parent_act.appendChild(my_btn_enroll);
+                    }
+                }
+            }
+        }
+        xhttp.open("GET","http://localhost:8000/api/enroll/" + courseId + "/" + curUser);
+        xhttp.send();
+    }
+
+    function toEnroll(courseId){
+        //alert("toEnroll: courseId="+courseId);
+        var enrollObj = {
+            "user": {
+                "email": curUser,
+            },
+            "course": {
+                "id": courseId
+            }
+        };
+        var post = JSON.stringify(enrollObj);
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', "http://localhost:8000/api/enroll", true);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=UTF-8');
+        xhr.send(post);
+
+        xhr.onload = function () {
+            if (xhr.status === 201) { //201-created
+                alert("You have successfully Enrolled in the course!");
+                loadCourses();
+            } else {
+                alert("Attention!\n" +
+                    "There was an error enrolling in the course.\n" +
+                    "Contact your administrator.");
+            }
+        }
+    }
+
+    function saveCommentsModal(){
+        //alert("saveCommentsModal: comment=" + valTextComment.value + " userRating=" + valUserRating.value + " id=" + valEnrollCardId1.value);
+        var enrollObj = {
+            "id": valEnrollCardId1.value,
+            "comment": valTextComment.value,
+            "userRating": valUserRating.value
+        };
+        var put = JSON.stringify(enrollObj);
+        var xhr = new XMLHttpRequest();
+        xhr.open('PUT', "http://localhost:8000/api/enroll", true);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=UTF-8');
+        xhr.send(put);
+
+        xhr.onload = function () {
+            if (xhr.status === 200) { //200-OK
+                //alert("Your data has been successfully saved!");
+                //loadCourses();
+            }
+        }
+        //itemCommentsModal.hide();
+    }
+
+    function openCommentsModal(courseId, enrollCardId) {
+        //alert("openCommentsModal: courseId="+courseId +", enrollCardId="+enrollCardId);
+        const myModal = new bootstrap.Modal('#itemCommentsModal', {backdrop: true, focus: true, keyboard: true});
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function(){
+            if (this.status === 200) {
+                const result = this.responseText;
+                var commentsList = JSON.parse(result);
+                var htmlCode = "";
+                var countRec = 0;
+                htmlCode += "<thead class='mt-2'>";
+                    htmlCode += "<tr>";
+                        htmlCode += "<th style='width: 80%;'>ALL REVIEWS</th>";
+                        htmlCode += "<th style='width: 10%;'>ESTIMATE</th>";
+                        htmlCode += "<th style='width: 10%;'>AUTHOR</th>";
+                    htmlCode += "</tr>";
+                htmlCode += "</thead>"
+                htmlCode += "<tbody>"
+                for (i=0; i<commentsList.length; i++) {
+                    if (commentsList[i]["id"] === enrollCardId) {
+                        valEnrollCardId1.value = enrollCardId;
+                        valTextComment.value = commentsList[i]["comment"];
+                        valUserRating.value = commentsList[i]["userRating"];
+                        valUserPoint.value = commentsList[i]["point"];
+                    } else {
+                        htmlCode += "<tr>";
+                            htmlCode += "<td style='max-height: 2em;'>" +
+                                commentsList[i]["comment"] + "</td>";
+                            htmlCode += "<td style='text-align: center;'>" +
+                                commentsList[i]["userRating"] + "</td>";
+                            htmlCode += "<td>" + commentsList[i]["user"]["fullName"] + "</td>";
+                        htmlCode += "</tr>";
+                        countRec++;
+                    }
+                }
+                htmlCode += "</tbody>"
+                if (countRec > 0) {
+                    tableCommentsList.innerHTML = htmlCode;
+                } else {
+                    tableCommentsList.innerHTML = "";
+                }
+            }
+        }
+        xhttp.open("GET","http://localhost:8000/api/enroll/comments/" + courseId);
+        xhttp.send();
+
+        myModal.show();
+    }
+
+    function openDetailsModal(courseId) {
+        // alert("openDetailsModal=" + courseId);
+        const myModal = new bootstrap.Modal('#itemCourseModal', {backdrop: true, focus: true, keyboard: true});
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function(){
+            if (this.status === 200) {
+                const result = this.responseText;
+                var courseItem = JSON.parse(result);
+                valCoursePrice.value = courseItem["priceValue"];
+                valCourseRating.value = courseItem["ratingValue"];
+                if (courseItem["author"] != null) {
+                    valCourseAuthor.value = courseItem["author"]["fullName"];
+                    valCourseAuthor.setAttribute("class", "text-primary");
+                } else {
+                    valCourseAuthor.value = "none";
+                    valCourseAuthor.setAttribute("class", "text-danger");
+                }
+            }
+        }
+        xhttp.open("GET","http://localhost:8000/api/courses/" + courseId);
+        xhttp.send();
+
+        myModal.show();
+    }
+
+    function openUnenrollModal(enrollCardId) {
+        //alert("openUnenrollModal=" + enrollCardId);
+        const myModal = new bootstrap.Modal('#itemUnenrollModal', {backdrop: true, focus: true, keyboard: true});
+        valEnrollCardId2.value = enrollCardId;
+
+        myModal.show();
+    }
+
+    function approveUnenrollModal(){
+        //alert("approveUnenrollModal: idCardEnroll=" + valEnrollCardId2.value);
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function(){
+            if(xhr.status === 200){
+                alert("You have successfully Unenrolled!");
+                loadCourses();
+            }
+        }
+        xhr.open('DELETE', "http://localhost:8000/api/enroll/" + valEnrollCardId2.value);
+        xhr.send();
+        //itemUnenrollModal.hide();
     }
 </script>
 </html>

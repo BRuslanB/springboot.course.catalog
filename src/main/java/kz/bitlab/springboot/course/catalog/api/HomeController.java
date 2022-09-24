@@ -60,6 +60,9 @@ public class HomeController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_TEACHER')")
     @GetMapping("/courses")
     public String coursesPage(Model model) {
+        //получить все уникальные категории Автора (тек.пользователя)
+        //List<Category> allCategoriesByAuthor= courseService.getAllCategoriesByAuthor(getCurrentUser().getId());
+        //model.addAttribute("allCategoriesByAuthor", allCategoriesByAuthor);
 
         List<Category> allCategories= categoryService.getAllCategories();
         model.addAttribute("allCategories", allCategories);
@@ -108,7 +111,6 @@ public class HomeController {
     public String addCourse(@RequestParam(name = "course_name") String courseName,
                             @RequestParam(name = "course_description") String courseDescription,
                             @RequestParam(name = "course_price") double coursePrice,
-                            //@RequestParam(name = "course_rating") double courseRating,
                             @RequestParam(name = "course_category_id") Long categoryId){
 
         Course course = new Course();
@@ -118,7 +120,6 @@ public class HomeController {
             course.setName(courseName);
             course.setDescription(courseDescription);
             course.setPrice(coursePrice);
-            //course.setRating(courseRating);
             courseService.addCourse(course);
         }
         return "redirect:/courses";
@@ -170,7 +171,7 @@ public class HomeController {
     public String studentsPage(Model model) {
         //получить все карточки юзеров
         List<EnrollCard> allEnrollCards = enrollCardService.getAllEnrollCards();
-        // получить все курсы текущего пользователя (Teacher) из каталога курсов
+        // получить все курсы Автора текущего пользователя (Teacher) из каталога курсов
         List<Course> allCoursesByAuthor = courseService.getAllCoursesByAuthor(getCurrentUser().getId());
 
         model.addAttribute("allEnrollCards", allEnrollCards);
